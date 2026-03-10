@@ -1,0 +1,46 @@
+<div class="flex justify-content-center align-items-center min-h-screen">
+  <div class="grid w-8">
+    <div class="col-12 md:col-6 logo">Logo</div>
+
+    <div class="col-12 md:col-6 login-form">
+      <h1 class="text-center">Login</h1>
+
+      <!-- Email & UserName -->
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="card flex flex-column gap-5 ms-3">
+          <p-floatLabel [ngClass]="{ 'p-filled': true }">
+            <input
+              pInputText
+              id="username&Email"
+              formControlName="emailUserName"
+            />
+            <label for="username&Email">Username / Email</label>
+          </p-floatLabel>
+
+          <p-floatLabel [ngClass]="{ 'p-filled': true }">
+            <input
+              pInputText
+              type="password"
+              id="password"
+              formControlName="password"
+            />
+            <label for="password">Password</label>
+          </p-floatLabel>
+          <a [routerLink]="['/forgetPassword']" class="text-center"
+            >forget Password?</a
+          >
+          <div class="card flex justify-content-center">
+            <button
+              pButton
+              pRipple
+              label="Log In"
+              type="submit"
+              icon="pi pi-user"
+              class="login-button"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
