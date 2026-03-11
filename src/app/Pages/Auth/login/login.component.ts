@@ -1,3 +1,4 @@
+import { ValidationsService } from './../../../Core/Services/validations.service';
 import { Component } from '@angular/core';
 import { PrimNgModule } from '../../../Core/shared/modules/prim-ng.module';
 import {
@@ -5,40 +6,71 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  RequiredValidator,
   Validators,
 } from '@angular/forms';
+import { Message } from 'primeng/api';
+import { get } from 'http';
+import { ValidationMessageComponent } from '../../../Core/shared/validation-message/validation-message.component';
+import { LogoComponent } from '../../../Core/shared/logo/logo.component';
+import { AuthService } from '../../../Core/Services/Auth-Services/auth.service';
+import { ToastService } from '../../../Core/Services/Toast.service';
+import { CheckboxModule } from 'primeng/checkbox';
+import { LoginResponse } from '../../../Core/Interfaces/Login-interfaces/login-response';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [PrimNgModule, ReactiveFormsModule],
+  imports: [
+    PrimNgModule,
+    ReactiveFormsModule,
+    ValidationMessageComponent,
+    LogoComponent,
+    CheckboxModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   loginForm!: FormGroup;
-  emailUserName!: FormControl;
+  emailOrUserName!: FormControl;
   password!: FormControl;
-  value: string | undefined;
-  constructor(private _formBuilder: FormBuilder) {}
+  rememberMe!: FormControl;
+  messages!: Message[];
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _authServices: AuthService,
+    public _validationService: ValidationsService,
+    private _toastService: ToastService,
+  ) {}
   ngOnInit(): void {
     this.initiateForms();
   }
   initiateForms(): void {
     this.loginForm = this._formBuilder.group({
-      emailUserName: ['', Validators.required],
+      emailOrUserName: ['', Validators.required],
       password: ['', Validators.required],
+      rememberMe: [false],
     });
   }
+
   login(): void {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-    } else {
-      Object.keys(this.loginForm.controls).forEach((key) => {
-        this.loginForm.controls[key].markAsDirty();
-        this.loginForm.controls[key].markAsTouched();
+      this._authServices.logIn(this.loginForm.value).subscribe({
+        next: (res: LoginResponse) => {
+          if (res.token) {
+            this._toastService.showSuccess(res.message, 'Success');
+            localStorage.setItem('token', res.token);
+            console.log(res.userName);
+          } else {
+            this._toastService.showError(res.message, 'Error');
+          }
+        },
+        error: (err) => {
+          this._toastService.showError(err.error.message, 'Error');
+        },
       });
+    } else {
+      this._validationService.markFormTouched(this.loginForm);
     }
   }
 }

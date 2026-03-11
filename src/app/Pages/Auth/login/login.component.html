@@ -1,34 +1,59 @@
 <div class="flex justify-content-center align-items-center min-h-screen">
   <div class="grid w-8">
-    <div class="col-12 md:col-6 logo">Logo</div>
+    <div class="col-12 md:col-4 flex justify-content-center align-items-center">
+      <app-logo />
+    </div>
 
-    <div class="col-12 md:col-6 login-form">
-      <h1 class="text-center">Login</h1>
+    <div class="col-12 md:col-8 login-form p-4 border-round-2xl">
+      <h1 class="text-center">Log In</h1>
 
-      <!-- Email & UserName -->
       <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <div class="card flex flex-column gap-5 ms-3">
-          <p-floatLabel [ngClass]="{ 'p-filled': true }">
+        <div class="card flex flex-column gap-2 ms-3">
+          <!-- Email & UserName -->
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-envelope"></i>
+            </p-inputGroupAddon>
             <input
+              formControlName="emailOrUserName"
+              [autofocus]="true"
               pInputText
-              id="username&Email"
-              formControlName="emailUserName"
+              placeholder="Email / UserName"
+              [style]="'w-100'"
             />
-            <label for="username&Email">Username / Email</label>
-          </p-floatLabel>
+          </p-inputGroup>
+          <app-validation-message
+            [control]="loginForm.get('emailOrUserName')!"
+            [messages]="{ required: 'Username / Email is required' }"
+          />
 
-          <p-floatLabel [ngClass]="{ 'p-filled': true }">
+          <!-- Password -->
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-key"></i>
+            </p-inputGroupAddon>
             <input
+              formControlName="password"
               pInputText
               type="password"
-              id="password"
-              formControlName="password"
+              placeholder="Password"
+              [style]="'w-100'"
             />
-            <label for="password">Password</label>
-          </p-floatLabel>
-          <a [routerLink]="['/forgetPassword']" class="text-center"
-            >forget Password?</a
-          >
+          </p-inputGroup>
+          <app-validation-message
+            [control]="loginForm.get('password')!"
+            [messages]="{ required: 'Password is required' }"
+          />
+
+          <!-- Remember Me -->
+          <div class="flex align-items-center gap-1">
+            <p-checkbox
+              formControlName="rememberMe"
+              [binary]="true"
+              inputId="ny"
+            />
+            <label for="ny">Remember Me</label>
+          </div>
           <div class="card flex justify-content-center">
             <button
               pButton
@@ -39,6 +64,9 @@
               class="login-button"
             ></button>
           </div>
+          <a [routerLink]="['/forgetPassword']" class="text-center"
+            >forget Password?</a
+          >
         </div>
       </form>
     </div>

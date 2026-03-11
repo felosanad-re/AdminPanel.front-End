@@ -1,0 +1,19 @@
+<div class="validation-msg">
+  <div class="card">
+    @if (control.dirty && control.touched) {
+      @for (err of getErrors(); track $index) {
+        <p-messages
+          [value]="[
+            {
+              severity: 'error',
+              summary: 'Validation Error',
+              detail: err,
+            },
+          ]"
+          [enableService]="false"
+          [closable]="false"
+        />
+      }
+    }
+  </div>
+</div>

@@ -5,7 +5,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
-
+import { MessagesModule } from 'primeng/messages';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 @NgModule({
   imports: [
     CommonModule,
@@ -14,6 +16,9 @@ import { ButtonModule } from 'primeng/button';
     FloatLabelModule,
     InputTextModule,
     ButtonModule,
+    MessagesModule,
+    InputGroupAddonModule,
+    InputGroupModule,
   ],
   exports: [
     CommonModule,
@@ -22,6 +27,9 @@ import { ButtonModule } from 'primeng/button';
     FloatLabelModule,
     InputTextModule,
     ButtonModule,
+    MessagesModule,
+    InputGroupAddonModule,
+    InputGroupModule,
   ],
 })
 export class PrimNgModule {}

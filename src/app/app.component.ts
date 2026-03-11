@@ -9,7 +9,6 @@ import { ToastModule } from 'primeng/toast';
   imports: [RouterOutlet, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers: [MessageService],
 })
 export class AppComponent {
   title = 'AdminPanel.front-End';
