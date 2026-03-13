@@ -1,0 +1,13 @@
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrapper {
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 0;
+}
+
+.page-wrapper.sidebar-open {
+  margin-left: 300px;
+}

@@ -1,0 +1,15 @@
+<!-- Navbar -->
+<div class="layout-wrapper">
+  <app-admin-navbar (toggleSidebar)="toggleSidebar()" />
+</div>
+
+<!-- sidebar -->
+<app-admin-sidebar [sidebarOpen]="sidebarOpen" />
+
+<!-- Pages -->
+<div class="page-wrapper" [class.sidebar-open]="sidebarOpen">
+  <router-outlet />
+</div>
+
+<!-- Footer -->
+<app-admin-footer />

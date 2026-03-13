@@ -34,6 +34,22 @@ export const routes: Routes = [
       },
     ],
   },
-  // { path: '', redirectTo: 'login', pathMatch: 'full' },
-  // { path: '**', redirectTo: 'login' },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import(`./Layouts/dashboard/dashboard.component`).then(
+        (c) => c.DashboardComponent,
+      ),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import(`./Pages/Admin/home/home.component`).then(
+            (c) => c.HomeComponent,
+          ),
+      },
+    ],
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
