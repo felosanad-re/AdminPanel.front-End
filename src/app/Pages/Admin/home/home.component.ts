@@ -346,8 +346,12 @@ export class HomeComponent {
                 color: textColorSecondary,
                 padding: 8,
                 callback: function (value: any, index: any) {
-                  const showIndices = [0, 4, 8, 11];
-                  return showIndices.includes(index) ? value : '';
+                  const positions = [0, 3, 6, 8];
+
+                  if (positions.includes(index)) {
+                    return TIME_LABELS_FULL[index] || '—';
+                  }
+                  return '';
                 },
               },
               grid: {
