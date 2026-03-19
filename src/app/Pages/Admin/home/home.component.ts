@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { Tooltip } from 'chart.js';
-import { callback } from 'chart.js/dist/helpers/helpers.core';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
-import { max, min } from 'rxjs';
 @Component({
   selector: 'app-home',
   standalone: true,

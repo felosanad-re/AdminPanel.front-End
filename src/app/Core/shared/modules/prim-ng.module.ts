@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { RippleModule } from 'primeng/ripple';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     MessagesModule,
     InputGroupAddonModule,
     InputGroupModule,
+    RippleModule,
   ],
   exports: [
     CommonModule,
@@ -30,6 +33,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     MessagesModule,
     InputGroupAddonModule,
     InputGroupModule,
+    RippleModule,
   ],
 })
 export class PrimNgModule {}

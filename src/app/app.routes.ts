@@ -48,6 +48,34 @@ export const routes: Routes = [
             (c) => c.HomeComponent,
           ),
       },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import(`./Pages/Admin/products/products.component`).then(
+            (c) => c.ProductsComponent,
+          ),
+      },
+      {
+        path: 'brands',
+        loadComponent: () =>
+          import(`./Pages/Admin/brands/brands.component`).then(
+            (c) => c.BrandsComponent,
+          ),
+      },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import(`./Pages/Admin/categories/categories.component`).then(
+            (c) => c.CategoriesComponent,
+          ),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import(`./Pages/Admin/orders/orders.component`).then(
+            (c) => c.OrdersComponent,
+          ),
+      },
     ],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
