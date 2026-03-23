@@ -36,6 +36,7 @@
     [value]="products"
     [rows]="10"
     [paginator]="true"
+    [lazy]="true"
     [globalFilterFields]="[
       'name',
       'country.name',
@@ -49,7 +50,7 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords"
-    (onPage)="onPageChange($event)"
+    (onLazyLoad)="onPageChange($event)"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -57,7 +58,12 @@
         <!-- Search -->
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
-          <input pInputText type="text" placeholder="Search..." />
+          <input
+            pInputText
+            type="text"
+            placeholder="Search..."
+            [formControl]="searchValue"
+          />
         </span>
         <!-- (input)="dt.filterGlobal($event.target.value, 'contains')"  -->
       </div>
@@ -130,14 +136,14 @@
             severity="danger"
             [rounded]="true"
             [outlined]="true"
-            (onClick)="deleteProduct(product.id)"
+            (onClick)="deleteProduct(product)"
           />
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="flex align-items-center justify-content-between">
-        In total there are {{ products ? products.length : 0 }} products.
+        In total there are {{ totalRecords }} products.
       </div>
     </ng-template>
   </p-table>
@@ -145,21 +151,21 @@
   <!-- Edit Product [Product by id] -->
   <p-dialog
     [(visible)]="productDialog"
-    [style]="{ width: '450px' }"
+    [style]="{ width: '780px' }"
     header="Product Details"
     [modal]="true"
     styleClass="p-fluid"
     (onHide)="hideDialog()"
   >
     <ng-template pTemplate="content">
+      <!-- Main Image -->
       <div class="fluid text-center">
-        <!-- Show Image -->
         @if (imagePreview || product.mainImage) {
           <img
             [src]="imagePreview || product.mainImage"
             [alt]="product.productName"
             class="block m-auto pb-3 border-round"
-            width="150"
+            width="200"
           />
         } @else {
           <p>No Image To preview</p>
@@ -178,6 +184,54 @@
           (onClick)="fileInput.click()"
         ></p-button>
       </div>
+
+      <!-- show subImages -->
+      <div class="fluid text-center my-5">
+        <div class="flex flex-wrap justify-content-center gap-3 mb-3">
+          <div
+            *ngFor="let image of subImagesPreview; let i = index"
+            class="relative"
+          >
+            <img
+              [src]="image"
+              class="border-round cursor-pointer"
+              width="170"
+              height="170"
+              (click)="onReplaceImage(i)"
+            />
+
+            <!-- Delete sub image -->
+            <p-button
+              icon="pi pi-times"
+              styleClass="absolute top-0 right-0 bg-red-500 text-white border-circle cursor-pointer"
+              [rounded]="true"
+              severity="danger"
+              (onClick)="deleteSubImage(i)"
+            />
+          </div>
+        </div>
+
+        @if (subImagesPreview.length < 3) {
+          <input
+            type="file"
+            accept="image/*"
+            #subImagesInput
+            hidden
+            (change)="OnSubImagesSelected($event)"
+          />
+          <p-button
+            [label]="
+              subImagesPreview.length === 0
+                ? 'Upload Images'
+                : 'Upload More Images'
+            "
+            icon="pi pi-upload"
+            (onClick)="subImagesInput.click()"
+          ></p-button>
+        }
+      </div>
+
+      <!-- Product Name -->
       <div class="field mt-5">
         <label for="productName">Name</label>
         <input
@@ -192,6 +246,8 @@
           Name is required.
         </small>
       </div>
+
+      <!-- Description -->
       <div class="field">
         <label for="description">Description</label>
         <textarea
@@ -203,51 +259,58 @@
           cols="20"
         >
         </textarea>
+        <small class="p-error" *ngIf="submitted && !product.description">
+          Name is required.
+        </small>
       </div>
 
       <!-- Category Selected -->
       <div class="field">
-        <label class="mb-3">Category</label>
-        <div class="formgrid grid">
-          <div class="field-radiobutton col-6">
-            <p-radioButton
-              id="category1"
-              name="category"
-              value="Accessories"
-              [(ngModel)]="product.categoryId"
-            />
-            <label for="category1">Accessories</label>
-          </div>
-          <div class="field-radiobutton col-6">
-            <p-radioButton
-              id="category2"
-              name="category"
-              value="Clothing"
-              [(ngModel)]="product.categoryId"
-            />
-            <label for="category2">Clothing</label>
-          </div>
-          <div class="field-radiobutton col-6">
-            <p-radioButton
-              id="category3"
-              name="category"
-              value="Electronics"
-              [(ngModel)]="product.categoryId"
-            />
-            <label for="category3">Electronics</label>
-          </div>
-          <div class="field-radiobutton col-6">
-            <p-radioButton
-              id="category4"
-              name="category"
-              value="Fitness"
-              [(ngModel)]="product.categoryId"
-            />
-            <label for="category4">Fitness</label>
-          </div>
-        </div>
+        <label for="category" class="mb-3 text-capitalize"
+          >select Category</label
+        >
+        <p-dropdown
+          [options]="categories"
+          [(ngModel)]="categorySelectedId"
+          optionValue="id"
+          [checkmark]="true"
+          optionLabel="categoryName"
+          [showClear]="true"
+          placeholder="Select a category"
+          styleClass="w-full"
+          appendTo="body"
+        />
+        <small
+          class="p-error text-capitalize"
+          *ngIf="submitted && !categorySelectedId"
+        >
+          category is required.
+        </small>
       </div>
 
+      <!-- Brand Selected -->
+      <div class="field">
+        <label for="brand" class="mb-3 text-capitalize">select brand</label>
+        <p-dropdown
+          id="brand"
+          [options]="brands"
+          optionLabel="brandName"
+          optionValue="id"
+          placeholder="Select a brand"
+          [(ngModel)]="brandSelectedId"
+          styleClass="w-full text-capitalize"
+          [showClear]="true"
+          appendTo="body"
+        ></p-dropdown>
+        <small
+          class="p-error text-capitalize"
+          *ngIf="submitted && !brandSelectedId"
+        >
+          brand is required.
+        </small>
+      </div>
+
+      <!-- price and stock -->
       <div class="formgrid grid">
         <div class="field col">
           <label for="price">Price</label>

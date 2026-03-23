@@ -52,7 +52,7 @@ export class ProductService {
   }
 
   // Get All Product
-  getProduct(
+  getProducts(
     productParams: ProductParams,
   ): Observable<ApplicationResultService<Pagination<ProductResponse>>> {
     const params = this.buildParams(productParams);
@@ -78,7 +78,7 @@ export class ProductService {
     const dataForm = this.buildFormData(data, true);
 
     return this._http.put<ApplicationResultService<ProductResponse>>(
-      `${environment.apiUrl}/Product/UpdateProduct`,
+      `${environment.apiUrl}/Product/editProduct`,
       dataForm,
     );
   }
@@ -90,7 +90,7 @@ export class ProductService {
     const dataForm = this.buildFormData(data, false);
 
     return this._http.post<ApplicationResultService<ProductResponse>>(
-      `${environment.apiUrl}/Product/CreateProduct`,
+      `${environment.apiUrl}/Product/AddProduct`,
       dataForm,
     );
   }
@@ -104,12 +104,13 @@ export class ProductService {
     );
   }
 
+  // Delete Multiple Product
   deleteBulk(
     ids: number[],
   ): Observable<ApplicationResultService<ProductResponse>> {
     return this._http.post<ApplicationResultService<ProductResponse>>(
-      `${environment.apiUrl}/Product/bulk`,
-      { ids },
+      `${environment.apiUrl}/product/bulk`,
+      ids,
     );
   }
 }

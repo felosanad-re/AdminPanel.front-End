@@ -1,3 +1,5 @@
+import { ProductImageResponse } from './product-image-response';
+
 export interface ProductResponse {
   id: number;
   productName: string;
@@ -10,5 +12,5 @@ export interface ProductResponse {
   price: number;
   stock: number;
   type?: string;
-  subImages: string[];
+  subImages: ProductImageResponse[];
 }
