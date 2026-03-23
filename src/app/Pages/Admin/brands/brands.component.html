@@ -1,1 +1,21 @@
-<p>brands works!</p>
+<app-show-details
+  [config]="{
+    type: 'brand',
+    fieldName: 'brandName',
+    imageFieldName: 'logo',
+    descriptionFieldName: 'description',
+  }"
+  [title]="title"
+  [data]="brand"
+  [allData]="brands"
+  [imagePreview]="imagePreview"
+  [submitted]="submitted"
+  [selectedData]="selectedBrands"
+  (openNew)="openNew()"
+  (hideDialog)="hideDialog()"
+  (editData)="editBrand($event)"
+  (deleteData)="deleteBrand($event)"
+  (onImageSelected)="onImageSelected($event)"
+  (saveData)="saveBrand()"
+  [dataDialog]="brandDialog"
+></app-show-details>

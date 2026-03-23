@@ -13,6 +13,15 @@ import { UpdatedBrand } from '../../Interfaces/Brands/updated-brand';
 export class BrandService {
   constructor(private _http: HttpClient) {}
 
+  buildForm(obj: any, includesId: boolean = true) {
+    const formData = new FormData();
+    if (includesId && obj.id != null && obj.id != undefined)
+      formData.append('id', obj.id.toString());
+    if (obj.logo instanceof File) formData.append('logo', obj.logo);
+    formData.append('brandName', obj.brandName);
+    formData.append('description', obj.description);
+    return formData;
+  }
   // Get all brands
   getBrands(): Observable<ApplicationResultService<BrandResponse[]>> {
     return this._http.get<ApplicationResultService<BrandResponse[]>>(
@@ -33,9 +42,10 @@ export class BrandService {
   addBrand(
     data: CreatedBrand,
   ): Observable<ApplicationResultService<BrandResponse>> {
+    const formData = this.buildForm(data, false);
     return this._http.post<ApplicationResultService<BrandResponse>>(
       `${environment.apiUrl}/brand/AddBrand`,
-      data,
+      formData,
     );
   }
 
@@ -43,9 +53,10 @@ export class BrandService {
   updateBrand(
     data: UpdatedBrand,
   ): Observable<ApplicationResultService<BrandResponse>> {
+    const formData = this.buildForm(data);
     return this._http.put<ApplicationResultService<BrandResponse>>(
       `${environment.apiUrl}/brand/EditBrand`,
-      data,
+      formData,
     );
   }
 

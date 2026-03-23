@@ -7,11 +7,12 @@ import { ShowDataModule } from '../../../Core/shared/modules/show-data.module';
 import { ConfirmationService } from 'primeng/api';
 import { ToastService } from '../../../Core/Services/Toast.service';
 import { CreatedCategory } from '../../../Core/Interfaces/Categories/created-category';
+import { ShowDetailsComponent } from '../../shared/show-details/show-details.component';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [ShowDataModule],
+  imports: [ShowDataModule, ShowDetailsComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
   styles: [
@@ -26,12 +27,13 @@ import { CreatedCategory } from '../../../Core/Interfaces/Categories/created-cat
   providers: [ConfirmationService],
 })
 export class CategoriesComponent {
+  title = 'Categories';
   categoryDialog: boolean = false;
   categories!: CategoryResponse[];
   category!: CategoryResponse;
   createdCategory!: CreatedCategory;
   updatedCategory!: UpdatedCategory;
-  selectedCategory!: CategoryResponse[] | null;
+  selectedCategory!: CategoryResponse[];
   submitted: boolean = false;
   imagePreview!: string | null;
   imageUpload!: File | null;
@@ -48,7 +50,6 @@ export class CategoriesComponent {
   getAllCategories() {
     this._categoryService.getCategories().subscribe({
       next: (res: ApplicationResultService<CategoryResponse[]>) => {
-        console.log(res.data);
         this.categories = res.data;
       },
     });
@@ -102,7 +103,7 @@ export class CategoriesComponent {
   }
 
   // save changes
-  saveProduct() {
+  saveCategory() {
     this.submitted = true;
     // edit
     if (this.category.id) {
