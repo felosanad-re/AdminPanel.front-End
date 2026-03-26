@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ToastService } from '../../../Core/Services/Toast.service';
 import { CreatedCategory } from '../../../Core/Interfaces/Categories/created-category';
 import { ShowDetailsComponent } from '../../shared/show-details/show-details.component';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-categories',
@@ -51,6 +52,10 @@ export class CategoriesComponent {
     this._categoryService.getCategories().subscribe({
       next: (res: ApplicationResultService<CategoryResponse[]>) => {
         this.categories = res.data;
+        this._toastService.showSuccess(res.message!, 'Success');
+      },
+      error: (err: ApplicationResultService<CategoryResponse[]>) => {
+        this._toastService.showError(err.message!, 'Error');
       },
     });
   }

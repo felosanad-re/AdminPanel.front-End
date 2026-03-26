@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,6 +12,8 @@ import { apiErrorInterceptor } from './Core/Services/Interceptors/api-error.inte
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { loadingInterceptor } from './Core/Services/Interceptors/loading.interceptor';
+import { handlerTokenInterceptor } from './Core/Services/Interceptors/handler-token.interceptor';
+import { initializeCurrentUser } from './app.Initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +21,11 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     MessageService,
     provideHttpClient(
-      withInterceptors([apiErrorInterceptor, loadingInterceptor]),
+      withInterceptors([
+        handlerTokenInterceptor,
+        apiErrorInterceptor,
+        loadingInterceptor,
+      ]),
     ),
     provideAnimations(),
   ],

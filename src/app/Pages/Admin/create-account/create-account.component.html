@@ -1,0 +1,102 @@
+<div class="container create-account border-round-xl p-5 my-3">
+  <h1>Create New Admin Account</h1>
+  <form [formGroup]="createAdminAccountForm" (ngSubmit)="createAdminAccount()">
+    <div class="formgrid grid">
+      <!-- First Name -->
+      <div class="field col-12 md:col-6">
+        <label>First name</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="firstName"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+        <app-validation-message
+          [control]="createAdminAccountForm.get('firstName')!"
+          [messages]="{
+            required: 'First name is required',
+            minlength: 'min length 3 characters',
+            maxlength: 'max length 20 characters',
+          }"
+        />
+      </div>
+      <!-- Last Name -->
+      <div class="field col-12 md:col-6">
+        <label>Last name</label>
+        <input
+          formControlName="lastName"
+          pInputText
+          type="text"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+        <app-validation-message
+          [control]="createAdminAccountForm.get('lastName')!"
+          [messages]="{
+            required: 'Last name is required',
+            minlength: 'min length 3 characters',
+            maxlength: 'max length 20 characters',
+          }"
+        />
+      </div>
+      <!-- User Name -->
+      <div class="field col-12 md:col-6">
+        <label>User Name</label>
+        <input
+          formControlName="userName"
+          pInputText
+          type="text"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+        <app-validation-message
+          [control]="createAdminAccountForm.get('userName')!"
+          [messages]="{
+            required: 'User name is required',
+            minlength: 'min length 3 characters',
+            maxlength: 'max length 20 characters',
+          }"
+        />
+      </div>
+      <!-- Email -->
+      <div class="field col-12 md:col-6">
+        <label>Email</label>
+        <input
+          formControlName="email"
+          pInputText
+          type="text"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+        <app-validation-message
+          [control]="createAdminAccountForm.get('email')!"
+          [messages]="{ required: 'emails required', email: 'invalid email' }"
+        />
+      </div>
+      <!-- Role -->
+      <div class="field col-12 md:col-6">
+        <label>Account Role</label>
+        <input
+          formControlName="role"
+          pInputText
+          type="text"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+        <app-validation-message
+          [control]="createAdminAccountForm.get('role')!"
+          [messages]="{ required: 'role is required' }"
+        />
+      </div>
+      <!-- Address -->
+      <div class="field col-12 md:col-6">
+        <label>Admin Address</label>
+        <input
+          formControlName="address"
+          pInputText
+          type="text"
+          class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+        />
+      </div>
+      <div class="flex justify-content-center align-items-center m-auto">
+        <p-button type="submit" label="Create New Account" class="my-4" />
+      </div>
+    </div>
+  </form>
+</div>

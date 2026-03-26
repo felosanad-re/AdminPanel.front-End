@@ -13,8 +13,10 @@ import { ResetPassword } from '../../Interfaces/Forget-Password-Interfaces/reset
 })
 export class AuthService {
   constructor(private http: HttpClient) {}
+  getUserName(): string | null {
+    return localStorage.getItem('userName');
+  }
   // Log In Services
-
   logIn(data: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
       `${environment.apiUrl}/Account/LogIn`,
@@ -34,5 +36,17 @@ export class AuthService {
       `${environment.apiUrl}/Account/ResetPassword`,
       data,
     );
+  }
+
+  setToken(token: string) {
+    localStorage.setItem('token', token);
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  removeToken() {
+    localStorage.removeItem('token');
   }
 }

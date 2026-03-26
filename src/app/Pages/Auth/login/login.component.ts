@@ -16,6 +16,7 @@ import { AuthService } from '../../../Core/Services/Auth-Services/auth.service';
 import { ToastService } from '../../../Core/Services/Toast.service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { LoginResponse } from '../../../Core/Interfaces/Login-interfaces/login-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,7 @@ export class LoginComponent {
     private _authServices: AuthService,
     public _validationService: ValidationsService,
     private _toastService: ToastService,
+    private _router: Router,
   ) {}
   ngOnInit(): void {
     this.initiateForms();
@@ -61,6 +63,7 @@ export class LoginComponent {
             this._toastService.showSuccess(res.message, 'Success');
             localStorage.setItem('token', res.token);
             console.log(res.userName);
+            this._router.navigate(['/dashboard']);
           } else {
             this._toastService.showError(res.message, 'Error');
           }

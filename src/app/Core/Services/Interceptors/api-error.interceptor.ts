@@ -14,8 +14,8 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
       console.error(err);
       // Other Errors
       if (err.status !== 200) {
-        const message = err.error.message
-          ? err.error.message
+        const message = err.message
+          ? err.message
           : 'Something went wrong, please try again later.';
         _toast.showError(message, 'Error');
       }

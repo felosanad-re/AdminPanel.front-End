@@ -33,7 +33,10 @@
           </defs>
         </svg>
         <h3 class="font-semibold">
-          Welcome back <span class="name">{{ userName }}</span>
+          Welcome back
+          <span class="name">{{
+            (currentUser$ | async)?.userName || "Guest"
+          }}</span>
         </h3>
         <p-button (onClick)="onToggle()" icon="pi pi-bars" />
       </div>

@@ -4,6 +4,9 @@ import { PrimNgModule } from '../../../Core/shared/modules/prim-ng.module';
 import { StyleClassModule } from 'primeng/styleclass';
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { AuthService } from '../../../Core/Services/Auth-Services/auth.service';
+import { Router } from '@angular/router';
+import { ToastService } from '../../../Core/Services/Toast.service';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -14,7 +17,11 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 })
 export class AdminSidebarComponent {
   items: MenuItem[] | undefined;
-
+  constructor(
+    private readonly _authService: AuthService,
+    private readonly _router: Router,
+    private readonly _toastService: ToastService,
+  ) {}
   ngOnInit() {
     this.items = [
       {
@@ -28,17 +35,17 @@ export class AdminSidebarComponent {
         items: [
           {
             label: 'Products',
-            icon: 'pi pi-star',
+            icon: 'pi pi-align-justify',
             routerLink: 'products',
           },
           {
             label: 'Category',
-            icon: 'pi pi-star',
+            icon: 'pi pi-th-large',
             routerLink: 'categories',
           },
           {
             label: 'Brands',
-            icon: 'pi pi-star',
+            icon: 'pi pi-sparkles',
             routerLink: 'brands',
           },
           {
@@ -52,6 +59,16 @@ export class AdminSidebarComponent {
         label: 'Contact',
         icon: 'pi pi-envelope',
       },
+      {
+        label: 'Create New Admin',
+        icon: 'pi pi-user-plus',
+        routerLink: 'createAccount',
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.logOut(),
+      },
     ];
   }
   @Input({ required: true }) sidebarOpen: boolean = false;
@@ -64,5 +81,11 @@ export class AdminSidebarComponent {
   closeCallback(e: Event): void {
     this.sidebarRef.close(e);
     // this.sidebarOpenChange.emit(false);
+  }
+
+  logOut() {
+    this._authService.removeToken();
+    this._router.navigate(['login']);
+    this._toastService.showSuccess('Logout Successfully', 'Success');
   }
 }

@@ -76,6 +76,20 @@ export const routes: Routes = [
             (c) => c.OrdersComponent,
           ),
       },
+      {
+        path: 'createAccount',
+        loadComponent: () =>
+          import(`./Pages/Admin/create-account/create-account.component`).then(
+            (c) => c.CreateAccountComponent,
+          ),
+      },
+      {
+        path: 'setPassword',
+        loadComponent: () =>
+          import(`./Pages/Admin/set-password/set-password.component`).then(
+            (c) => c.SetPasswordComponent,
+          ),
+      },
     ],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
