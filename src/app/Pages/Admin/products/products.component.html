@@ -1,5 +1,4 @@
 <div class="card">
-  <p-toast />
   <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
       <p-button
@@ -59,13 +58,13 @@
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input
+            #search
             pInputText
             type="text"
             placeholder="Search..."
-            [formControl]="searchValue"
+            (input)="onSearch(search.value)"
           />
         </span>
-        <!-- (input)="dt.filterGlobal($event.target.value, 'contains')"  -->
       </div>
     </ng-template>
     <ng-template pTemplate="header">

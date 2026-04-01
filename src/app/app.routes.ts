@@ -70,10 +70,17 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'orders',
+        path: 'createReport',
         loadComponent: () =>
-          import(`./Pages/Admin/orders/orders.component`).then(
-            (c) => c.OrdersComponent,
+          import(
+            `./Pages/Admin/reports/create-report/create-report.component`
+          ).then((c) => c.CreateReportComponent),
+      },
+      {
+        path: 'reports',
+        loadComponent: () =>
+          import(`./Pages/Admin/reports/reports/reports.component`).then(
+            (c) => c.ReportsComponent,
           ),
       },
       {

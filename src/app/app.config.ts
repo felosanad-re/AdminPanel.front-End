@@ -1,8 +1,4 @@
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  importProvidersFrom,
-} from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -13,7 +9,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { loadingInterceptor } from './Core/Services/Interceptors/loading.interceptor';
 import { handlerTokenInterceptor } from './Core/Services/Interceptors/handler-token.interceptor';
-import { initializeCurrentUser } from './app.Initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [

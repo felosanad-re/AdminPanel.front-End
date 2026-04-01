@@ -371,4 +371,9 @@ export class ProductsComponent {
     }
     this.getAllProduct();
   }
+
+  onSearch(value: string) {
+    this.productParams.search = value;
+    this.getAllProduct();
+  }
 }

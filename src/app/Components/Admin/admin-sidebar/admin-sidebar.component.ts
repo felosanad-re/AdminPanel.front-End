@@ -1,4 +1,10 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { PrimNgModule } from '../../../Core/shared/modules/prim-ng.module';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -71,18 +77,18 @@ export class AdminSidebarComponent {
       },
     ];
   }
-  @Input({ required: true }) sidebarOpen: boolean = false;
-  // @Output() sidebarOpenChange = new EventEmitter<boolean>();
-
+  @Input() sidebarOpen: boolean = false;
+  @Output() sidebarOpenChange = new EventEmitter<boolean>();
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
   onHide() {
-    // this.sidebarOpenChange.emit(false);
-  }
-  closeCallback(e: Event): void {
-    this.sidebarRef.close(e);
-    // this.sidebarOpenChange.emit(false);
+    this.sidebarOpen = false;
+    this.sidebarOpenChange.emit(false);
   }
 
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+    this.sidebarOpenChange.emit(this.sidebarOpen);
+  }
   logOut() {
     this._authService.removeToken();
     this._router.navigate(['login']);

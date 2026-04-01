@@ -14,8 +14,8 @@ export class ReportService {
   constructor(private readonly _http: HttpClient) {}
 
   // get All Reports
-  getReports(): Observable<ApplicationResultService<ReportResponse>> {
-    return this._http.get<ApplicationResultService<ReportResponse>>(
+  getReports(): Observable<ApplicationResultService<ReportResponse[]>> {
+    return this._http.get<ApplicationResultService<ReportResponse[]>>(
       `${environment.apiUrl}/report/reports`,
     );
   }

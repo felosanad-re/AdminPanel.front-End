@@ -32,7 +32,7 @@ export class UserService {
     data: SetPassword,
   ): Observable<ApplicationResultService<ApplicationUserResponse>> {
     return this._http.post<ApplicationResultService<ApplicationUserResponse>>(
-      `${environment.apiUrl}/user/SetPassword`,
+      `${environment.apiUrl}/user/setPassword`,
       data,
     );
   }

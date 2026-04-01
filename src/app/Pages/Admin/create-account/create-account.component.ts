@@ -74,7 +74,7 @@ export class CreateAccountComponent {
     this._userService.createUser(this.createAdminAccountForm.value).subscribe({
       next: (res) => {
         this._toastService.showSuccess(res.message!, 'Success');
-        this._router.navigate([`/dashboard/setPassword`]);
+        this.createAdminAccountForm.reset();
       },
     });
   }

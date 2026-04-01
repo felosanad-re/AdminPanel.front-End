@@ -1,0 +1,192 @@
+<div class="card">
+  <p-table
+    [value]="reports"
+    dataKey="id"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [expandedRowKeys]="expandedRows"
+    (onRowExpand)="onRowExpand($event)"
+    (onRowCollapse)="onRowCollapse($event)"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex flex-wrap justify-content-end gap-2">
+        <p-button
+          label="Expand All"
+          icon="pi pi-plus"
+          text
+          (onClick)="expandAll()"
+        />
+        <p-button
+          label="Collapse All"
+          icon="pi pi-minus"
+          text
+          (onClick)="collapseAll()"
+        />
+      </div>
+    </ng-template>
+    <!-- Report Headers -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5rem"></th>
+        <th pSortableColumn="id">Report Number <p-sortIcon field="id" /></th>
+        <th pSortableColumn="userName">
+          Admin Name <p-sortIcon field="userName" />
+        </th>
+        <th pSortableColumn="totalReportTransactionPrice">
+          total Report Price <p-sortIcon field="totalReportTransactionPrice" />
+        </th>
+        <th pSortableColumn="createdAt">
+          created At <p-sortIcon field="createdAt" />
+        </th>
+        <th>Print</th>
+        <th>Delete</th>
+      </tr>
+    </ng-template>
+    <!-- Report Body -->
+    <ng-template pTemplate="body" let-report let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            pRipple
+            [pRowToggler]="report"
+            [text]="true"
+            [rounded]="true"
+            [plain]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td>{{ report.id }}</td>
+        <td>{{ report.userName }}</td>
+        <td>{{ report.totalReportTransactionPrice | currency: "USD" }}</td>
+        <td>{{ report.createdAt | date: "short" }}</td>
+        <td>
+          <p-button
+            type="button"
+            pRipple
+            [text]="true"
+            [rounded]="true"
+            [plain]="true"
+            [icon]="'pi pi-print'"
+            [severity]="'success'"
+            (onClick)="printReport(report.id)"
+          />
+        </td>
+        <td>
+          <p-button
+            type="button"
+            pRipple
+            [text]="true"
+            [rounded]="true"
+            [plain]="true"
+            [icon]="'pi pi-trash'"
+            [severity]="'danger'"
+          />
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Report Items Headers -->
+    <ng-template pTemplate="rowexpansion" let-report>
+      <tr>
+        <td colspan="9">
+          <div class="p-3">
+            <p-table [value]="report.items" dataKey="productId">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="id">
+                    Product Id <p-sortIcon field="price" />
+                  </th>
+                  <th pSortableColumn="productName">
+                    Product Name <p-sortIcon field="productName" />
+                  </th>
+                  <th pSortableColumn="quantity">
+                    quantity <p-sortIcon field="quantity" />
+                  </th>
+                  <th pSortableColumn="price">
+                    Price<p-sortIcon field="price" />
+                  </th>
+                  <th pSortableColumn="totalPrice">
+                    total Price <p-sortIcon field="totalPrice" />
+                  </th>
+                  <th style="width: 4rem"></th>
+                </tr>
+              </ng-template>
+              <!-- Report Items Body -->
+              <ng-template pTemplate="body" let-reportItem>
+                <tr>
+                  <td>{{ reportItem.productId }}</td>
+                  <td>{{ reportItem.productName }}</td>
+                  <td>{{ reportItem.quantity }}</td>
+                  <td>{{ reportItem.price | currency: "USD" }}</td>
+                  <td>{{ reportItem.totalPrice | currency: "USD" }}</td>
+                  <td><p-button type="button" icon="pi pi-search" /></td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">
+                    There are no Products for this Report yet.
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- print -->
+  <p-dialog
+    header="Header"
+    [(visible)]="visible"
+    [modal]="true"
+    header="Report Details"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '50vw' }"
+    styleClass="p-fluid"
+    (onHide)="hideDialog()"
+  >
+    <ng-template pTemplate="content">
+      <div class="fluid text-center">
+        <div class="field mt-5">
+          <label for="userName">Admin Name</label>
+          <input
+            type="text"
+            pInputText
+            id="productName"
+            [(ngModel)]="report.userName"
+            required
+            autofocus
+          />
+          <small class="p-error" *ngIf="submitted && !report.userName">
+            Name is required.
+          </small>
+        </div>
+
+        <div class="field mt-5">
+          <label for="userName">Created At</label>
+          <input
+            type="datetime-local"
+            pInputText
+            id="productName"
+            [(ngModel)]="report.createdAt"
+            disabled
+          />
+          <small class="p-error" *ngIf="submitted && !report.userName">
+            Name is required.
+          </small>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button (onClick)="print()" label="Print" [outlined]="true" />
+      <p-button
+        (onClick)="hideDialog()"
+        label="Cancel"
+        severity="danger"
+        [outlined]="true"
+      />
+    </ng-template>
+  </p-dialog>
+</div>

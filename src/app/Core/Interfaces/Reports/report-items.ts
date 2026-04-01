@@ -1,7 +1,8 @@
 export interface ReportItems {
   productId: number;
-  productName: string;
-  price: number;
   quantity: number;
-  totalPrice: number;
+  price: number;
+  productName?: string;
+  totalPrice?: number;
+  mainImage?: string;
 }
