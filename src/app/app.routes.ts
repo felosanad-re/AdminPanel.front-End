@@ -84,6 +84,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'printReport/:id',
+        loadComponent: () =>
+          import(
+            `./Pages/Admin/reports/print-report/print-report.component`
+          ).then((c) => c.PrintReportComponent),
+      },
+      {
         path: 'createAccount',
         loadComponent: () =>
           import(`./Pages/Admin/create-account/create-account.component`).then(
@@ -99,6 +106,6 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '**', redirectTo: 'login' },
 ];

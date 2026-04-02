@@ -4,7 +4,7 @@ export interface ReportResponse {
   id: number;
   userName: string;
   userId: string;
-  Items: ReportItems[];
+  items: ReportItems[];
   totalReportTransactionPrice: number;
   isDeleted: boolean;
   createdAt: Date;

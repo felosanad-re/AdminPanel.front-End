@@ -12,6 +12,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ReportItems } from '../../../../Core/Interfaces/Reports/report-items';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reports',
@@ -24,14 +27,18 @@ import { FormsModule } from '@angular/forms';
     DialogModule,
     InputTextModule,
     FormsModule,
+    ConfirmDialogModule,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
+  providers: [ConfirmationService],
 })
 export class ReportsComponent {
   constructor(
     private readonly _reportService: ReportService,
     private readonly _toastService: ToastService,
+    private readonly _confirmationService: ConfirmationService,
+    private readonly _router: Router,
   ) {}
 
   // Properties
@@ -39,8 +46,6 @@ export class ReportsComponent {
   report!: ReportResponse;
   reportItems!: ReportItems[];
   expandedRows: Record<number, boolean> = {};
-  visible: boolean = false;
-  submitted: boolean = false;
   ngOnInit() {
     this.getAllReports();
   }
@@ -53,23 +58,37 @@ export class ReportsComponent {
     });
   }
 
-  // Edit Report
+  // print Report
   printReport(id: number) {
     this._reportService.getReportDetails(id).subscribe({
       next: (res) => {
-        this._toastService.showSuccess(res.message!, 'Success');
-        this.report = res.data;
-        this.reportItems = res.data.Items;
-        this.visible = true;
+        this._toastService.showSuccess(res.message! + ' Details', 'Success');
+        this._router.navigate(['dashboard/printReport', id]);
       },
     });
   }
 
-  // Save Changes
-  print() {}
-  hideDialog() {
-    this.visible = false;
+  deleteReport(id: number) {
+    this._confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        this._reportService.deleteReport(id).subscribe({
+          next: (res) => {
+            this._toastService.showSuccess(res.message!, 'Success');
+          },
+        });
+      },
+      reject: () => {
+        this._toastService.showSuccess('Report not deleted', 'Success');
+      },
+    });
   }
+
   // expandAll
   expandAll() {
     this.expandedRows = Object.fromEntries(

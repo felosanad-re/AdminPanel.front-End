@@ -39,20 +39,10 @@ export class ReportService {
     );
   }
 
-  // edit Report
-  editReport(
-    data: UpdatedReport,
-  ): Observable<ApplicationResultService<ReportResponse>> {
-    return this._http.put<ApplicationResultService<ReportResponse>>(
-      `${environment.apiUrl}/report/EditReport`,
-      data,
-    );
-  }
-
   // delete report
   deleteReport(id: number): Observable<ApplicationResultService<boolean>> {
     return this._http.delete<ApplicationResultService<boolean>>(
-      `${environment.apiUrl}/report/DeletedReport/${id}`,
+      `${environment.apiUrl}/report/deleteReport/${id}`,
     );
   }
 }
