@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ReportService } from '../../../../Core/Services/AdminServices/report.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from '../../../../Core/Services/Toast.service';
 import { ProductService } from '../../../../Core/Services/AdminServices/product.service';
 import { ProductResponse } from '../../../../Core/Interfaces/Products/product-response';
@@ -8,26 +7,14 @@ import { ProductParams } from '../../../../Core/Interfaces/Products/product-para
 import { Pagination } from '../../../../Core/Interfaces/pagination';
 import { ApplicationResultService } from '../../../../Core/Interfaces/application-result-service';
 import { ReportItems } from '../../../../Core/Interfaces/Reports/report-items';
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+
 import { CreatedReport } from '../../../../Core/Interfaces/Reports/created-report';
-import { FormsModule } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { MenubarModule } from 'primeng/menubar';
+import { InvoiceReportComponent } from '../../../shared/invoice-report/invoice-report.component';
 
 @Component({
   selector: 'app-create-report',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    ButtonModule,
-    CommonModule,
-    TableModule,
-    FormsModule,
-    InputNumberModule,
-    MenubarModule,
-  ],
+  imports: [InvoiceReportComponent],
   templateUrl: './create-report.component.html',
   styleUrl: './create-report.component.scss',
 })
@@ -36,6 +23,7 @@ export class CreateReportComponent {
     private readonly _reportService: ReportService,
     private readonly _productService: ProductService,
     private readonly _toastService: ToastService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
   ngOnInit(): void {
     this.getProducts();
@@ -58,14 +46,16 @@ export class CreateReportComponent {
   }
 
   // Add Item To Report
-  addToItems(
-    product: ProductResponse,
-    quantity: number | null | undefined,
-    price: number | null | undefined,
-  ) {
+  addToItems(event: {
+    product: ProductResponse;
+    quantity: number | null | undefined;
+    price: number | null | undefined;
+  }) {
+    const { product, quantity, price } = event;
     const unitPrice = price ?? 0;
     const qty = quantity ?? 0;
     if (qty <= 0) return;
+    if (unitPrice <= 0) return;
     const existItem = this.productInItems.find(
       (i) => i.productId === product.id,
     );
@@ -80,10 +70,21 @@ export class CreateReportComponent {
         price: unitPrice,
       });
     }
+    this.productInItems = [...this.productInItems];
+  }
+
+  removeFromItems(product: ProductResponse) {
+    console.log('Removing product:', product);
+    this.productInItems = this.productInItems.filter(
+      (item) => item.productId !== product.id,
+    );
+    this.productInItems = [...this.productInItems];
+    this.cdr.detectChanges();
+    setTimeout(() => this.cdr.detectChanges(), 10);
   }
 
   // Create report
-  createReport() {
+  onCreateReport() {
     const data: CreatedReport = {
       items: this.productInItems.map((item) => ({
         productId: item.productId,
@@ -91,7 +92,6 @@ export class CreateReportComponent {
         price: item.price,
       })),
     };
-    debugger;
     this._reportService.addReport(data).subscribe({
       next: (res) => {
         console.log(res);
@@ -101,7 +101,7 @@ export class CreateReportComponent {
     });
   }
 
-  onSearch(value: string) {
+  onSearchHandler(value: string) {
     this.productParams.search = value;
     this.getProducts();
   }
