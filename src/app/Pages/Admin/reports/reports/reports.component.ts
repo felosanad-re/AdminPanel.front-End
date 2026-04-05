@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Router } from '@angular/router';
+import { InvoiceReportsShowComponent } from '../../../shared/invoice-reports-show/invoice-reports-show.component';
 
 @Component({
   selector: 'app-reports',
@@ -28,6 +29,7 @@ import { Router } from '@angular/router';
     InputTextModule,
     FormsModule,
     ConfirmDialogModule,
+    InvoiceReportsShowComponent,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
@@ -46,6 +48,7 @@ export class ReportsComponent {
   report!: ReportResponse;
   reportItems!: ReportItems[];
   expandedRows: Record<number, boolean> = {};
+  pageName: string = 'Sales Reports';
   ngOnInit() {
     this.getAllReports();
   }
@@ -54,6 +57,7 @@ export class ReportsComponent {
     this._reportService.getReports().subscribe({
       next: (res: ApplicationResultService<ReportResponse[]>) => {
         this.reports = res.data;
+        console.log(this.reports);
       },
     });
   }
@@ -63,7 +67,9 @@ export class ReportsComponent {
     this._reportService.getReportDetails(id).subscribe({
       next: (res) => {
         this._toastService.showSuccess(res.message! + ' Details', 'Success');
-        this._router.navigate(['dashboard/printReport', id]);
+        this._router.navigate(['dashboard/printReport', id], {
+          queryParams: { type: 'sales' },
+        });
       },
     });
   }

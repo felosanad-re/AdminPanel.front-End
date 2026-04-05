@@ -1,11 +1,10 @@
-import { ReportItems } from './report-items';
+import { BuyerItems } from './buyer-items';
 
-export interface ReportResponse {
+export interface BuyerReportResponse {
   id: number;
-  userName: string;
-  userId: string;
+  adminName: string;
   companyName: string;
-  items: ReportItems[];
+  items: BuyerItems[];
   totalReportTransactionPrice: number;
   isDeleted: boolean;
   createdAt: Date;

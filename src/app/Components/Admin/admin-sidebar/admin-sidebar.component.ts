@@ -55,9 +55,19 @@ export class AdminSidebarComponent {
             routerLink: 'brands',
           },
           {
-            label: 'Orders',
-            icon: 'pi pi-star',
-            routerLink: 'orders',
+            label: 'Reports',
+            items: [
+              {
+                label: 'Buyer Reports',
+                icon: 'pi pi-star',
+                routerLink: 'buyerReports',
+              },
+              {
+                label: 'Sales Reports',
+                icon: 'pi pi-dollar',
+                routerLink: 'reports',
+              },
+            ],
           },
         ],
       },

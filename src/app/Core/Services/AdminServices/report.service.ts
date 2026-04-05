@@ -5,7 +5,6 @@ import { ApplicationResultService } from '../../Interfaces/application-result-se
 import { ReportResponse } from '../../Interfaces/Reports/report-response';
 import { environment } from '../../../environments/environment';
 import { CreatedReport } from '../../Interfaces/Reports/created-report';
-import { UpdatedReport } from '../../Interfaces/Reports/updated-report';
 
 @Injectable({
   providedIn: 'root',

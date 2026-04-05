@@ -98,6 +98,7 @@ export class ProductsComponent {
   submitted: boolean = false;
   searchValue = new FormControl('');
   products$!: Observable<ApplicationResultService<Pagination<ProductResponse>>>;
+  first: number = 0;
   constructor(
     private readonly _productService: ProductService,
     private readonly _toastService: ToastService,
@@ -121,20 +122,6 @@ export class ProductsComponent {
         this.categories = res.data;
       },
     });
-
-    // search
-    this.products$ = this.searchValue.valueChanges.pipe(
-      debounceTime(350),
-      distinctUntilChanged(),
-      tap((value) => {
-        this.productParams.search = (value || '').trim();
-        this.productParams.pageIndex = 1;
-      }),
-      switchMap(() => {
-        console.log('call api with params', this.productParams);
-        return this._productService.getProducts(this.productParams);
-      }),
-    );
   }
 
   getAllProduct() {
@@ -150,6 +137,9 @@ export class ProductsComponent {
             this._toastService.showSuccess(res.message!, 'product');
           }
         }
+      },
+      error: (err: ApplicationResultService<Pagination<ProductResponse>>) => {
+        console.log(err.message);
       },
     });
   }
@@ -363,17 +353,14 @@ export class ProductsComponent {
   onPageChange(event: any) {
     this.productParams.pageIndex = event.first / event.rows + 1;
     this.productParams.pageSize = event.rows;
-    if (event.sortField) {
-      this.productParams.sort =
-        event.sortOrder === 1
-          ? event.sortField + 'Asc'
-          : event.sortField + 'Desc';
-    }
+
     this.getAllProduct();
   }
 
   onSearch(value: string) {
     this.productParams.search = value;
+    this.productParams.pageIndex = 1;
+    this.first = 0;
     this.getAllProduct();
   }
 }

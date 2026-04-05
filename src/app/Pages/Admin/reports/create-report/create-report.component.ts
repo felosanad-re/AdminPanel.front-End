@@ -35,12 +35,17 @@ export class CreateReportComponent {
   totalPrice!: number; // price * count
   productInItems: ReportItems[] = []; // Send To Back End id | count and preview
   createReportData!: CreatedReport;
-
+  reportName!: string;
+  route: string = '../reports';
+  totalProductCount!: number;
+  first: number = 0;
+  page: string = 'Sales';
   // get Products
   getProducts() {
     this._productService.getProducts(this.productParams).subscribe({
       next: (res: ApplicationResultService<Pagination<ProductResponse>>) => {
         this.products = res.data.data;
+        this.totalProductCount = res.data.count;
       },
     });
   }
@@ -85,7 +90,9 @@ export class CreateReportComponent {
 
   // Create report
   onCreateReport() {
+    debugger;
     const data: CreatedReport = {
+      companyName: this.reportName,
       items: this.productInItems.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
@@ -94,7 +101,6 @@ export class CreateReportComponent {
     };
     this._reportService.addReport(data).subscribe({
       next: (res) => {
-        console.log(res);
         this._toastService.showSuccess(res.message!, 'Success');
         this.productInItems = [];
       },
@@ -103,6 +109,15 @@ export class CreateReportComponent {
 
   onSearchHandler(value: string) {
     this.productParams.search = value;
+    this.productParams.pageIndex = 1;
+    this.productParams.pageSize = 5;
+    this.first = 0;
+    this.getProducts();
+  }
+
+  onPageChange(e: any) {
+    this.productParams.pageIndex = e.first / e.rows + 1;
+    this.productParams.pageSize = e.rows;
     this.getProducts();
   }
 

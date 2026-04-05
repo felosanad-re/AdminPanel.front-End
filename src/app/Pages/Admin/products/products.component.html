@@ -36,12 +36,6 @@
     [rows]="10"
     [paginator]="true"
     [lazy]="true"
-    [globalFilterFields]="[
-      'name',
-      'country.name',
-      'representative.name',
-      'status',
-    ]"
     [tableStyle]="{ 'min-width': '75rem' }"
     [(selection)]="selectedProducts"
     [rowHover]="true"
@@ -50,6 +44,7 @@
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords"
     (onLazyLoad)="onPageChange($event)"
+    [first]="first"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">

@@ -1,5 +1,21 @@
 <div class="my-3">
-  <h1>Create New Report</h1>
+  <h1>Create New {{ pageName }} Report</h1>
+  <div class="mb-4">
+    <label for="reportName" class="block text-2xl font-semibold mb-2">
+      Report Name
+    </label>
+
+    <input
+      id="reportName"
+      type="text"
+      pInputText
+      [ngModel]="reportName"
+      (ngModelChange)="reportNameChange.emit($event)"
+      placeholder="Enter report name..."
+      class="w-4"
+      style="font-size: 1.1rem; padding: 12px 14px"
+    />
+  </div>
   <div class="grid">
     <!-- Show Items -->
     <div class="col-12 md:col-6">
@@ -8,23 +24,31 @@
           [value]="products"
           [tableStyle]="{ 'min-width': '40rem' }"
           [paginator]="true"
-          [rows]="10"
+          [rows]="5"
           [showCurrentPageReport]="true"
+          [totalRecords]="itemCount"
+          [lazy]="true"
+          (onLazyLoad)="onPageChangeHelper.emit($event)"
+          [first]="onFirst"
         >
           <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-              All Products
+              <h5 class="m-0">Select Products To Add To Report items</h5>
+              <!-- Search -->
+              <p-iconField>
+                <p-inputIcon>
+                  <i class="pi pi-search"></i>
+                </p-inputIcon>
+
+                <input
+                  #search
+                  pInputText
+                  type="text"
+                  placeholder="Search..."
+                  (input)="onSearch.emit(search.value)"
+                />
+              </p-iconField>
             </div>
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                #search
-                pInputText
-                type="text"
-                placeholder="Search..."
-                (input)="onSearch.emit(search.value)"
-              />
-            </span>
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
@@ -101,7 +125,7 @@
         [value]="productInItems"
         [tableStyle]="{ 'min-width': '40rem' }"
         [paginator]="true"
-        [rows]="10"
+        [rows]="5"
         [showCurrentPageReport]="true"
         [rowTrackBy]="trackByProductId"
       >
@@ -155,7 +179,7 @@
             <p-button label="Save" (onClick)="createReport.emit()" />
             <p-button
               label="See All Reports"
-              [routerLink]="['../reports']"
+              [routerLink]="routes"
               [severity]="'success'"
               class="mx-3"
             />

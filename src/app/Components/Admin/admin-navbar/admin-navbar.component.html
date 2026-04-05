@@ -43,9 +43,13 @@
     </ng-template>
     <ng-template pTemplate="end">
       <div class="flex align-items-center gap-2">
-        <p-button label="Export Data" severity="secondary" />
         <p-button
-          label="Create Report"
+          label="Create Buyer Report"
+          severity="secondary"
+          [routerLink]="['createBuyerReport']"
+        />
+        <p-button
+          label="Create Sales Report"
           severity="help"
           [routerLink]="['createReport']"
         />

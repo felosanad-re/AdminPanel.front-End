@@ -84,11 +84,32 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'buyerReports',
+        loadComponent: () =>
+          import(
+            `./Pages/Admin/reports/buyer-reports/buyer-reports.component`
+          ).then((c) => c.BuyerReportsComponent),
+      },
+      {
+        path: 'createBuyerReport',
+        loadComponent: () =>
+          import(
+            `./Pages/Admin/reports/create-buyer-report/create-buyer-report.component`
+          ).then((c) => c.CreateBuyerReportComponent),
+      },
+      {
         path: 'printReport/:id',
         loadComponent: () =>
           import(
             `./Pages/Admin/reports/print-report/print-report.component`
           ).then((c) => c.PrintReportComponent),
+      },
+      {
+        path: 'printBuyerReport/:id',
+        loadComponent: () =>
+          import(
+            `./Pages/Admin/reports/print-buyer-report/print-buyer-report.component`
+          ).then((c) => c.PrintSalesReportComponent),
       },
       {
         path: 'createAccount',

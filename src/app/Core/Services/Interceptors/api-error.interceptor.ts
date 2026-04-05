@@ -9,16 +9,25 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       // Ignore Refresh and navigation status code [0]
       if (err.status === 0) {
+        console.warn(
+          `[CORS/Network Warning] Status 0 for: ${req.url} (${req.method})`,
+        );
         return throwError(() => err);
       }
-      console.error(err);
-      // Other Errors
-      if (err.status !== 200) {
-        const message = err.error?.message
-          ? err.error?.message
-          : 'Something went wrong, please try again later.';
-        _toast.showError(message, 'Error');
+      console.error('Full HTTP Error Object:', err); // Other Errors
+      let errorMessage = 'Something went wrong, please try again later';
+      const errorBody = err.error;
+      if (errorBody) {
+        // Error message is string
+        if (typeof errorBody === 'string') {
+          errorMessage = errorBody;
+        }
+        // Error message is object
+        else if (errorBody.message) {
+          errorMessage = errorBody.message;
+        }
       }
+      _toast.showError(errorMessage, 'Error');
       return throwError(() => err);
     }),
   );

@@ -1,13 +1,13 @@
 <app-invoice-reports-show
-  [allData]="reports"
-  [data]="report"
+  [allData]="buyerReports"
+  [data]="reports"
   [onReportItems]="reportItems"
   [onExpandedRows]="expandedRows"
   [onPageName]="pageName"
   (onCollapseAll)="collapseAll()"
   (onExpandAll)="expandAll()"
-  (onDelete)="deleteReport($event)"
-  (onPrint)="printReport($event)"
-  (onRowExpand)="onRowExpand($event)"
+  (onDelete)="removeReport($event)"
+  (onPrint)="print($event)"
   (onRowCollapse)="onRowCollapse($event)"
+  (onRowExpand)="onRowExpand($event)"
 />
