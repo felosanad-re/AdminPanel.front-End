@@ -5,7 +5,7 @@ export interface BuyerReportResponse {
   adminName: string;
   companyName: string;
   items: BuyerItems[];
-  totalReportTransactionPrice: number;
+  totalReportTransaction: number;
   isDeleted: boolean;
   createdAt: Date;
   createdBy: string;

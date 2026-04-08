@@ -43,4 +43,10 @@ export class BuyerInvoiceService {
       `${environment.apiUrl}/Purchase/DeletePurchase/${id}`,
     );
   }
+
+  getTotal(): Observable<number[]> {
+    return this._http.get<number[]>(
+      `${environment.apiUrl}/Purchase/TotalPurchase`,
+    );
+  }
 }

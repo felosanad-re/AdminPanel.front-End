@@ -44,4 +44,8 @@ export class ReportService {
       `${environment.apiUrl}/report/deleteReport/${id}`,
     );
   }
+
+  getTotalPrice(): Observable<number[]> {
+    return this._http.get<number[]>(`${environment.apiUrl}/report/totalPrice`);
+  }
 }
