@@ -3,11 +3,18 @@ import { TableRowExpandEvent, TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-invoice-reports-show',
   standalone: true,
-  imports: [TableModule, Button, CommonModule, ConfirmDialogModule],
+  imports: [
+    TableModule,
+    Button,
+    CommonModule,
+    ConfirmDialogModule,
+    FileUploadModule,
+  ],
   templateUrl: './invoice-reports-show.component.html',
   styleUrl: './invoice-reports-show.component.scss',
 })
@@ -23,4 +30,6 @@ export class InvoiceReportsShowComponent {
   @Output() onRowCollapse = new EventEmitter<TableRowExpandEvent>();
   @Output() onDelete = new EventEmitter<any>();
   @Output() onPrint = new EventEmitter<any>();
+  @Output() onImportHandler = new EventEmitter<any>();
+  @Output() onExportHandler = new EventEmitter<any>();
 }

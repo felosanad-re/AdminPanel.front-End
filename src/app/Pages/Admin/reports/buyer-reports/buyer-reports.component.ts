@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 import { InvoiceReportsShowComponent } from '../../../shared/invoice-reports-show/invoice-reports-show.component';
 import { BuyerItems } from '../../../../Core/Interfaces/BuyerReports/buyer-items';
 import { Router } from '@angular/router';
+import { ImportResult } from '../../../../Core/Interfaces/import-result';
 
 @Component({
   selector: 'app-buyer-reports',
@@ -93,6 +94,80 @@ export class BuyerReportsComponent {
         });
       },
     });
+  }
+
+  onImport(event: any) {
+    const file: File | undefined =
+      event?.files?.[0] ?? event?.currentFiles?.[0];
+    if (!file) {
+      this._toastService.showError(
+        'Please select a valid Excel file.',
+        'Error',
+      );
+      return;
+    }
+
+    this._buyerReport.importPurchase(file).subscribe({
+      next: (res: ImportResult<unknown>) => {
+        const errors = res.errors?.filter((error) => error?.trim());
+        if (errors?.length)
+          this._toastService.showError(
+            errors.join(' | '),
+            'Import completed Field',
+          );
+        else {
+          this._toastService.showSuccess(res.message!, 'Import completed');
+        }
+        this.getAllBuyerReport();
+      },
+      error: (err) => {
+        this._toastService.showError(
+          err?.error?.message || err?.message || 'Import failed',
+          'Error',
+        );
+      },
+    });
+  }
+
+  onExport() {
+    this._buyerReport.exportPurchase().subscribe({
+      next: (res) => {
+        const blob = res.body;
+
+        if (!blob) {
+          this._toastService.showError('Export failed', 'Error');
+          return;
+        }
+
+        const fileName =
+          this.getFileNameFromHeader(res.headers.get('content-disposition')) ||
+          `Purchase-${new Date().toISOString().slice(0, 10)}.xlsx`;
+
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(downloadUrl);
+        this._toastService.showSuccess(
+          'Purchase exported successfully',
+          'Success',
+        );
+      },
+    });
+  }
+
+  private getFileNameFromHeader(
+    contentDisposition: string | null,
+  ): string | null {
+    if (!contentDisposition) return null;
+
+    const match = contentDisposition.match(
+      /filename\*?=(?:UTF-8''|\"?)([^\";]+)/i,
+    );
+    return match?.[1]
+      ? decodeURIComponent(match[1].replace(/\"/g, '').trim())
+      : null;
   }
 
   collapseAll() {
