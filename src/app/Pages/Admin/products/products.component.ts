@@ -1,7 +1,6 @@
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { UpdateProductDTO } from './../../../Core/Interfaces/Products/update-product-dto';
 import { CreateProductDTO } from './../../../Core/Interfaces/Products/create-product-dto';
-import { ConfirmationService, Message } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { Component } from '@angular/core';
 import { ProductService } from '../../../Core/Services/AdminServices/product.service';
 import { ProductResponse } from '../../../Core/Interfaces/Products/product-response';
@@ -30,14 +29,8 @@ import { BrandService } from '../../../Core/Services/AdminServices/brand.service
 import { CategoryService } from '../../../Core/Services/AdminServices/category.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProductImageResponse } from '../../../Core/Interfaces/Products/product-image-response';
-import {
-  debounce,
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { Observable } from 'rxjs';
+import { ImportResult } from '../../../Core/Interfaces/import-result';
 
 @Component({
   selector: 'app-products',
@@ -200,7 +193,9 @@ export class ProductsComponent {
           this._toastService.showError(err.error.message, 'Error');
         },
       });
-    } else {
+    }
+    // Add New
+    else {
       // Add New Product
       const dto: CreateProductDTO = {
         productName: this.product.productName,
@@ -362,5 +357,75 @@ export class ProductsComponent {
     this.productParams.pageIndex = 1;
     this.first = 0;
     this.getAllProduct();
+  }
+
+  onImportProducts(event: any) {
+    const file: File | undefined = event?.files?.[0] ?? event?.currentFiles?.[0];
+
+    if (!file) {
+      this._toastService.showError('Please select a valid Excel file.', 'Error');
+      return;
+    }
+
+    this._productService.importProducts(file).subscribe({
+      next: (res: ImportResult<unknown>) => {
+        const errors = res.errors?.filter((error) => error?.trim());
+        if (errors?.length) {
+          this._toastService.showError(errors.join(' | '), 'Import completed');
+        } else {
+          this._toastService.showSuccess(res.message, 'Import completed');
+        }
+
+        this.selectedProducts = [];
+        this.first = 0;
+        this.productParams.pageIndex = 1;
+        this.getAllProduct();
+      },
+      error: (err) => {
+        this._toastService.showError(
+          err?.error?.message || err?.message || 'Import failed',
+          'Error',
+        );
+      },
+    });
+  }
+
+  exportProducts() {
+    this._productService.exportProducts().subscribe({
+      next: (response) => {
+        const blob = response.body;
+
+        if (!blob) {
+          this._toastService.showError('Export failed', 'Error');
+          return;
+        }
+
+        const fileName =
+          this.getFileNameFromHeaders(response.headers.get('content-disposition')) ||
+          `Products-${new Date().toISOString().slice(0, 10)}.xlsx`;
+
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(downloadUrl);
+
+        this._toastService.showSuccess('Products exported successfully', 'Success');
+      },
+      error: (err) => {
+        this._toastService.showError(
+          err?.error?.message || err?.message || 'Export failed',
+          'Error',
+        );
+      },
+    });
+  }
+
+  private getFileNameFromHeaders(contentDisposition: string | null): string | null {
+    if (!contentDisposition) return null;
+
+    const match = contentDisposition.match(/filename\*?=(?:UTF-8''|\"?)([^\";]+)/i);
+    return match?.[1] ? decodeURIComponent(match[1].replace(/\"/g, '').trim()) : null;
   }
 }

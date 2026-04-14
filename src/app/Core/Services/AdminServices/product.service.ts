@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -8,6 +8,7 @@ import { ProductParams } from '../../Interfaces/Products/product-params';
 import { Pagination } from '../../Interfaces/pagination';
 import { UpdateProductDTO } from '../../Interfaces/Products/update-product-dto';
 import { CreateProductDTO } from '../../Interfaces/Products/create-product-dto';
+import { ImportResult } from '../../Interfaces/import-result';
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +49,16 @@ export class ProductService {
         formData.append('subImages', file);
       });
     }
+    return formData;
+  }
+
+  // Build Import Form Data
+  buildImportFormData(file: File): FormData {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('config.sheetName', 'Products');
+    formData.append('config.startRow', '2');
+    formData.append('config.hasHeader', 'true');
     return formData;
   }
 
@@ -112,5 +123,23 @@ export class ProductService {
       `${environment.apiUrl}/product/bulk`,
       ids,
     );
+  }
+
+  // Import Product Excel
+  importProducts(file: File): Observable<ImportResult<unknown>> {
+    const formData = this.buildImportFormData(file);
+
+    return this._http.post<ImportResult<unknown>>(
+      `${environment.apiUrl}/Import/Products`,
+      formData,
+    );
+  }
+
+  // Export Product Excel
+  exportProducts(): Observable<HttpResponse<Blob>> {
+    return this._http.get(`${environment.apiUrl}/Export/Products`, {
+      observe: 'response',
+      responseType: 'blob',
+    });
   }
 }
