@@ -2,7 +2,7 @@ import { BuyerItems } from './buyer-items';
 
 export interface BuyerReportResponse {
   id: number;
-  adminName: string;
+  userName: string;
   companyName: string;
   items: BuyerItems[];
   totalReportTransaction: number;

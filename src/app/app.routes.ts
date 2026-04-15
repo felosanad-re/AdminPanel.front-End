@@ -127,6 +127,20 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'print/report/:id',
+    loadComponent: () =>
+      import(`./Pages/Admin/reports/print-report/print-report.component`).then(
+        (c) => c.PrintReportComponent,
+      ),
+  },
+  {
+    path: 'print/buyer-report/:id',
+    loadComponent: () =>
+      import(
+        `./Pages/Admin/reports/print-buyer-report/print-buyer-report.component`
+      ).then((c) => c.PrintSalesReportComponent),
+  },
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
   // { path: '**', redirectTo: 'login' },
 ];

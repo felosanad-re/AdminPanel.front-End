@@ -25,7 +25,7 @@ export class ReportService {
   // get All Reports
   getReports(): Observable<ApplicationResultService<ReportResponse[]>> {
     return this._http.get<ApplicationResultService<ReportResponse[]>>(
-      `${environment.apiUrl}/report/reports`,
+      `${environment.apiUrl}/SalesReport/salesReports`,
     );
   }
 
@@ -34,7 +34,7 @@ export class ReportService {
     id: number,
   ): Observable<ApplicationResultService<ReportResponse>> {
     return this._http.get<ApplicationResultService<ReportResponse>>(
-      `${environment.apiUrl}/report/reportDetails/${id}`,
+      `${environment.apiUrl}/SalesReport/Details/${id}`,
     );
   }
 
@@ -43,7 +43,7 @@ export class ReportService {
     data: CreatedReport,
   ): Observable<ApplicationResultService<ReportResponse>> {
     return this._http.post<ApplicationResultService<ReportResponse>>(
-      `${environment.apiUrl}/report/AddReport`,
+      `${environment.apiUrl}/SalesReport/Add`,
       data,
     );
   }
@@ -51,7 +51,7 @@ export class ReportService {
   // delete report
   deleteReport(id: number): Observable<ApplicationResultService<boolean>> {
     return this._http.delete<ApplicationResultService<boolean>>(
-      `${environment.apiUrl}/report/deleteReport/${id}`,
+      `${environment.apiUrl}/SalesReport/delete/${id}`,
     );
   }
 
@@ -61,7 +61,7 @@ export class ReportService {
 
   // Export Report
   exportSales(): Observable<HttpResponse<Blob>> {
-    return this._http.get(`${environment.apiUrl}/Export/Buyer`, {
+    return this._http.get(`${environment.apiUrl}/Export/SalesReport`, {
       observe: 'response',
       responseType: 'blob',
     });
@@ -72,7 +72,7 @@ export class ReportService {
     const formData = this.buildImportFormData(file);
 
     return this._http.post<ImportResult<unknown>>(
-      `${environment.apiUrl}/Import/Buyer`,
+      `${environment.apiUrl}/Import/SalesReport`,
       formData,
     );
   }

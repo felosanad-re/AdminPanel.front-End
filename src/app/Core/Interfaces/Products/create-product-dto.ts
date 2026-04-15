@@ -6,5 +6,5 @@ export interface CreateProductDTO {
   mainImage: File | null;
   price: number;
   stock: number;
-  subImages: File[];
+  subImages: File[] | null;
 }

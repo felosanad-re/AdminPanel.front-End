@@ -89,9 +89,12 @@ export class BuyerReportsComponent {
     this._buyerReport.getBuyerReport(id).subscribe({
       next: (res) => {
         this._toastService.showSuccess(res.message! + ' Details', 'Success');
-        this._router.navigate(['dashboard/printBuyerReport', id], {
-          queryParams: { type: 'buyer' },
-        });
+        const url = this._router.serializeUrl(
+          this._router.createUrlTree(['/print/buyer-report', id], {
+            queryParams: { type: 'buyer' },
+          }),
+        );
+        window.open(url, '_blank', 'noopener,noreferrer');
       },
     });
   }

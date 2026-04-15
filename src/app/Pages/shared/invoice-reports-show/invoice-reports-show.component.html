@@ -78,8 +78,8 @@
         </td>
         <td>{{ report.id }}</td>
         <td>{{ report.companyName }}</td>
-        <td>{{ report.userName }}</td>
-        <td>{{ report.totalReportTransactionPrice | currency: "USD" }}</td>
+        <td>{{ getReportUserName(report) }}</td>
+        <td>{{ getReportGrandTotal(report) | currency: "USD" }}</td>
         <td>{{ report.createdAt | date: "short" }}</td>
         <td>
           <!-- Print Report -->

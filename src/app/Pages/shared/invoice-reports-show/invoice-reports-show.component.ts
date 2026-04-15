@@ -32,4 +32,14 @@ export class InvoiceReportsShowComponent {
   @Output() onPrint = new EventEmitter<any>();
   @Output() onImportHandler = new EventEmitter<any>();
   @Output() onExportHandler = new EventEmitter<any>();
+
+  getReportUserName(report: any): string {
+    return report?.userName || report?.adminName || report?.createdBy || 'N/A';
+  }
+
+  getReportGrandTotal(report: any): number {
+    return (
+      report?.totalReportTransactionPrice ?? report?.totalReportTransaction ?? 0
+    );
+  }
 }

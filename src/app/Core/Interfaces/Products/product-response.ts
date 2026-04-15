@@ -12,5 +12,5 @@ export interface ProductResponse {
   price: number;
   stock: number;
   type?: string;
-  subImages: ProductImageResponse[];
+  subImages: ProductImageResponse[] | null;
 }

@@ -75,7 +75,7 @@ export class ProductsComponent {
   updateProductDTO!: UpdateProductDTO;
   imagePreview!: string | null;
   uploadImage!: File | null; // used with create & update [mainImage]
-  subImages!: ProductImageResponse[];
+  subImages: ProductImageResponse[] | null = null;
   subImagesPreview: string[] = [];
   subImagesUploads: File[] = []; // used with create & update [subImages]
   productParams = new ProductParams();
@@ -152,7 +152,9 @@ export class ProductsComponent {
       next: (res: ApplicationResultService<ProductResponse>) => {
         this.brandSelectedId = res.data.brandId;
         this.categorySelectedId = res.data.categoryId;
-        this.subImagesPreview = res.data.subImages.map((img) => img.imagesUrl);
+        this.subImagesPreview = (res.data.subImages ?? []).map(
+          (img) => img.imagesUrl,
+        );
         this.product = res.data;
         this._toastService.showSuccess(res.message!, 'Success');
         this.productDialog = true;

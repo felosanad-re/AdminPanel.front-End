@@ -68,9 +68,12 @@ export class ReportsComponent {
     this._reportService.getReportDetails(id).subscribe({
       next: (res) => {
         this._toastService.showSuccess(res.message! + ' Details', 'Success');
-        this._router.navigate(['dashboard/printReport', id], {
-          queryParams: { type: 'sales' },
-        });
+        const url = this._router.serializeUrl(
+          this._router.createUrlTree(['/print/report', id], {
+            queryParams: { type: 'sales' },
+          }),
+        );
+        window.open(url, '_blank', 'noopener,noreferrer');
       },
     });
   }

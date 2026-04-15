@@ -4,8 +4,8 @@ export interface UpdateProductDTO {
   brandId: number;
   categoryId: number;
   description: string;
-  mainImage: File;
+  mainImage: File | null;
   price: number;
   stock: number;
-  subImages: File[];
+  subImages: File[] | null;
 }
