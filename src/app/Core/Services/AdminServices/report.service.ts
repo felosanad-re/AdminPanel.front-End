@@ -17,7 +17,7 @@ export class ReportService {
   buildImportFormData(file: File): FormData {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('config.sheetName', 'Buyer');
+    formData.append('config.sheetName', 'SalesReport');
     formData.append('config.startRow', '2');
     formData.append('config.hasHeader', 'true');
     return formData;
