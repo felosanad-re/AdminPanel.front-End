@@ -1,27 +1,65 @@
-# AdminPanelFrontEnd
+# 🖥️ Admin Panel - Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+A modern Admin Dashboard built with Angular for managing products, users, orders, and system data.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📌 Project Overview
 
-## Code scaffolding
+This is the **frontend part** of a full-stack Admin Panel system.  
+It communicates with a RESTful API built using ASP.NET Core.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Backend Repository:
+👉 Soulution.AdminPanel.Apis
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## ⚙️ Features
 
-## Running unit tests
+- Admin Dashboard (Statistics & Overview)
+- Manage Products (CRUD)
+- Manage Orders
+- Manage Users
+- Authentication (Login / Logout)
+- Role-based Access Control (Admin / Super Admin)
+- Protected Routes
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 🔗 Backend Integration
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+This frontend consumes data from the backend via REST APIs.
 
-## Further help
+- Authentication: JWT Token
+- API Communication: HttpClient / Axios (حسب اللي عندك)
+- Base API URL is configured in environment file
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
+
+## 🛠️ Tech Stack
+
+- Angular
+- TypeScript
+- Bootstrap / Tailwind (حسب استخدامك)
+- RxJS
+- JWT Authentication
+
+---
+
+## 🚀 Getting Started
+
+### Install dependencies
+```bash
+npm install
+
+### 🔐 Demo Account (Super Admin)
+
+## ⚠️ For testing only:
+
+Email: Super_Admin
+Password: Admin1234$
+
+### 👨‍💻 Author
+
+Developed by: Felopatter Sanad
+
