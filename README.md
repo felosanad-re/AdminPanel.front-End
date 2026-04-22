@@ -40,7 +40,7 @@ This frontend consumes data from the backend via REST APIs.
 
 - Angular
 - TypeScript
-- Bootstrap / Tailwind (حسب استخدامك)
+- Prime NG & Prime Flex
 - RxJS
 - JWT Authentication
 
@@ -51,7 +51,7 @@ This frontend consumes data from the backend via REST APIs.
 ### Install dependencies
 ```bash
 npm install
-
+---
 ### 🔐 Demo Account (Super Admin)
 
 ## ⚠️ For testing only:
