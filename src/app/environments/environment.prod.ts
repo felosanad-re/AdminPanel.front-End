@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://composystemapi.runasp.net/api',
+  apiUrl: 'http://adminpanelapi.runasp.net/api',
 };
