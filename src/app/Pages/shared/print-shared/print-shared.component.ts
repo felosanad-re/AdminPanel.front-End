@@ -6,11 +6,12 @@ import { BuyerItems } from '../../../Core/Interfaces/BuyerReports/buyer-items';
 import { BuyerReportResponse } from '../../../Core/Interfaces/BuyerReports/buyer-report-response';
 import { ReportItems } from '../../../Core/Interfaces/Reports/report-items';
 import { ReportResponse } from '../../../Core/Interfaces/Reports/report-response';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-print-shared',
   standalone: true,
-  imports: [Button, TableModule, CommonModule],
+  imports: [Button, TableModule, CommonModule, TranslateModule],
   templateUrl: './print-shared.component.html',
   styleUrl: './print-shared.component.scss',
 })
@@ -21,12 +22,21 @@ export class PrintSharedComponent {
   @Output() onPrint = new EventEmitter<void>();
   @Output() onGetReport = new EventEmitter<void>();
 
+  constructor(private readonly _translate: TranslateService) {}
+
   get reportTitle(): string {
-    return this.pageName?.trim() ? `${this.pageName} Report` : 'Report Details';
+    return this.pageName?.trim()
+      ? this._translate.instant('PRINT_SHARED.PAGE_NAME_REPORT', {
+          pageName: this.pageName,
+        })
+      : this._translate.instant('PRINT_SHARED.REPORT_DETAILS');
   }
 
   get companyName(): string {
-    return this.data?.companyName?.trim() || 'Not provided';
+    return (
+      this.data?.companyName?.trim() ||
+      this._translate.instant('PRINT_SHARED.NOT_PROVIDED')
+    );
   }
 
   get items(): Array<ReportItems | BuyerItems> {
@@ -42,7 +52,7 @@ export class PrintSharedComponent {
       (this.data as ReportResponse)?.createdBy ||
       (this.data as ReportResponse)?.userName ||
       (this.data as BuyerReportResponse)?.userName ||
-      'Not provided'
+      this._translate.instant('PRINT_SHARED.NOT_PROVIDED')
     );
   }
 

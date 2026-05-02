@@ -3,14 +3,14 @@
     <ng-template pTemplate="left">
       <p-button
         severity="success"
-        label="New"
+        [label]="'SHOW_DETAILS.NEW' | translate"
         icon="pi pi-plus"
         class="mr-2"
         (onClick)="openNew.emit()"
       />
       <p-button
         severity="danger"
-        label="Delete"
+        [label]="'SHOW_DETAILS.DELETE' | translate"
         icon="pi pi-trash"
         [disabled]="!selectedData || !selectedData.length"
       />
@@ -21,11 +21,14 @@
         mode="basic"
         accept="image/*"
         [maxFileSize]="1000000"
-        label="Import"
-        chooseLabel="Import"
+        [chooseLabel]="'SHOW_DETAILS.IMPORT' | translate"
         class="mr-2 inline-block"
       />
-      <p-button severity="help" label="Export" icon="pi pi-upload" />
+      <p-button
+        severity="help"
+        [label]="'SHOW_DETAILS.EXPORT' | translate"
+        icon="pi pi-upload"
+      />
     </ng-template>
   </p-toolbar>
 
@@ -44,12 +47,14 @@
     [(selection)]="selectedData"
     [rowHover]="true"
     dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [currentPageReportTemplate]="'SHOW_DETAILS.SHOWING_ENTRIES' | translate"
     [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-        <h5 class="m-0">Manage {{ title }}</h5>
+        <h5 class="m-0">
+          {{ "SHOW_DETAILS.MANAGE" | translate: { title: title } }}
+        </h5>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -58,11 +63,13 @@
           <p-tableHeaderCheckbox />
         </th>
         <th pSortableColumn="brandName" style="min-width: 15rem">
-          brand Name <p-sortIcon field="brandName" />
+          {{ "SHOW_DETAILS.BRAND_NAME" | translate }}
+          <p-sortIcon field="brandName" />
         </th>
-        <th>brand Image</th>
+        <th>{{ "SHOW_DETAILS.BRAND_IMAGE" | translate }}</th>
         <th pSortableColumn="description">
-          Description <p-sortIcon field="description" />
+          {{ "SHOW_DETAILS.DESCRIPTION" | translate }}
+          <p-sortIcon field="description" />
         </th>
         <th></th>
       </tr>
@@ -110,7 +117,7 @@
   <p-dialog
     [(visible)]="dataDialog"
     [style]="{ width: '600px' }"
-    [header]="title + ' Details'"
+    [header]="'SHOW_DETAILS.DETAILS' | translate: { title: title }"
     [modal]="true"
     styleClass="p-fluid"
     (onHide)="hideDialog.emit()"
@@ -126,7 +133,7 @@
             width="250"
           />
         } @else {
-          <p>there is no image to show</p>
+          <p>{{ "SHOW_DETAILS.NO_IMAGE_TO_SHOW" | translate }}</p>
         }
         <input
           type="file"
@@ -138,13 +145,15 @@
         <p-button
           (click)="inputFile.click()"
           type="button"
-          label="Upload Image"
+          [label]="'SHOW_DETAILS.UPLOAD_IMAGE' | translate"
           icon="pi pi-upload"
         ></p-button>
       </div>
       <!-- Edit Name -->
       <div class="field mt-5">
-        <label for="name">{{ title }} Name</label>
+        <label for="name">{{
+          "SHOW_DETAILS.NAME" | translate: { title: title }
+        }}</label>
         <input
           type="text"
           pInputText
@@ -154,12 +163,14 @@
           autofocus
         />
         <small class="p-error" *ngIf="submitted && !data[config.fieldName]">
-          Name is required.
+          {{ "SHOW_DETAILS.NAME_REQUIRED" | translate }}
         </small>
       </div>
       <!-- Edit Description -->
       <div class="field">
-        <label for="description">Description</label>
+        <label for="description">{{
+          "SHOW_DETAILS.DESCRIPTION" | translate
+        }}</label>
         <textarea
           id="description"
           pInputTextarea
@@ -174,13 +185,13 @@
 
     <ng-template pTemplate="footer">
       <p-button
-        label="Cancel"
+        [label]="'SHOW_DETAILS.CANCEL' | translate"
         icon="pi pi-times"
         [text]="true"
         (onClick)="hideDialog.emit()"
       />
       <p-button
-        label="Save"
+        [label]="'SHOW_DETAILS.SAVE' | translate"
         icon="pi pi-check"
         [text]="true"
         (onClick)="saveData.emit()"

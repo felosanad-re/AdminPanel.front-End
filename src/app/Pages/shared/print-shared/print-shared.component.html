@@ -1,50 +1,54 @@
 <div class="print-shell" *ngIf="data">
   <div class="print-actions no-print">
-    <p-button label="Print" icon="pi pi-print" (onClick)="onPrint.emit()" />
+    <p-button
+      [label]="'PRINT_SHARED.PRINT' | translate"
+      icon="pi pi-print"
+      (onClick)="onPrint.emit()"
+    />
   </div>
 
   <section class="report-paper">
     <header class="report-header">
       <div>
-        <p class="eyebrow">Admin Dashboard</p>
+        <p class="eyebrow">{{ "PRINT_SHARED.ADMIN_DASHBOARD" | translate }}</p>
         <h1>{{ reportTitle }}</h1>
-        <p class="sub-title">Printable report summary with all report items.</p>
+        <p class="sub-title">{{ "PRINT_SHARED.SUBTITLE" | translate }}</p>
       </div>
 
       <div class="report-meta-hero">
-        <span>Report No.</span>
+        <span>{{ "PRINT_SHARED.REPORT_NO" | translate }}</span>
         <strong>#{{ data.id }}</strong>
       </div>
     </header>
 
     <section class="report-overview">
       <article class="overview-card">
-        <span class="label">Report Name</span>
+        <span class="label">{{ "PRINT_SHARED.REPORT_NAME" | translate }}</span>
         <strong>{{ reportTitle }}</strong>
       </article>
 
       <article class="overview-card">
-        <span class="label">Company Name</span>
+        <span class="label">{{ "PRINT_SHARED.COMPANY_NAME" | translate }}</span>
         <strong>{{ companyName }}</strong>
       </article>
 
       <article class="overview-card">
-        <span class="label">Report Date</span>
+        <span class="label">{{ "PRINT_SHARED.REPORT_DATE" | translate }}</span>
         <strong>{{ data.createdAt | date: "dd MMM yyyy, hh:mm a" }}</strong>
       </article>
 
       <article class="overview-card">
-        <span class="label">Created By</span>
+        <span class="label">{{ "PRINT_SHARED.CREATED_BY" | translate }}</span>
         <strong>{{ createdByName }}</strong>
       </article>
 
       <article class="overview-card">
-        <span class="label">Items Count</span>
+        <span class="label">{{ "PRINT_SHARED.ITEMS_COUNT" | translate }}</span>
         <strong>{{ itemsCount }}</strong>
       </article>
 
       <article class="overview-card accent">
-        <span class="label">Grand Total</span>
+        <span class="label">{{ "PRINT_SHARED.GRAND_TOTAL" | translate }}</span>
         <strong>{{ grandTotal | currency: "USD" }}</strong>
       </article>
     </section>
@@ -52,8 +56,8 @@
     <section class="items-section">
       <div class="section-heading">
         <div>
-          <h2>Report Items</h2>
-          <p>All products included in this report.</p>
+          <h2>{{ "PRINT_SHARED.REPORT_ITEMS" | translate }}</h2>
+          <p>{{ "PRINT_SHARED.ALL_PRODUCTS_INCLUDED" | translate }}</p>
         </div>
       </div>
 
@@ -62,11 +66,11 @@
           <ng-template pTemplate="header">
             <tr>
               <th>#</th>
-              <th>Product ID</th>
-              <th>Product Name</th>
-              <th>Unit Price</th>
-              <th>Quantity</th>
-              <th>Total Price</th>
+              <th>{{ "PRINT_SHARED.PRODUCT_ID" | translate }}</th>
+              <th>{{ "PRINT_SHARED.PRODUCT_NAME" | translate }}</th>
+              <th>{{ "PRINT_SHARED.UNIT_PRICE" | translate }}</th>
+              <th>{{ "PRINT_SHARED.QUANTITY" | translate }}</th>
+              <th>{{ "PRINT_SHARED.TOTAL_PRICE" | translate }}</th>
             </tr>
           </ng-template>
 
@@ -74,7 +78,11 @@
             <tr>
               <td>{{ rowIndex + 1 }}</td>
               <td>{{ item.productId }}</td>
-              <td>{{ item.productName || "N/A" }}</td>
+              <td>
+                {{
+                  item.productName || ("PRINT_SHARED.NOT_PROVIDED" | translate)
+                }}
+              </td>
               <td>{{ item.price | currency: "USD" }}</td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.totalPrice | currency: "USD" }}</td>
@@ -83,7 +91,7 @@
 
           <ng-template pTemplate="footer">
             <tr class="summary-row">
-              <td colspan="5">Grand Total</td>
+              <td colspan="5">{{ "PRINT_SHARED.GRAND_TOTAL" | translate }}</td>
               <td>{{ grandTotal | currency: "USD" }}</td>
             </tr>
           </ng-template>
@@ -92,7 +100,7 @@
     </section>
 
     <footer class="report-footer">
-      <span>Report #{{ data.id }}</span>
+      <span>{{ "PRINT_SHARED.REPORT_NO" | translate }} #{{ data.id }}</span>
       <span>{{ reportTitle }}</span>
       <span>{{ data.createdAt | date: "dd/MM/yyyy" }}</span>
     </footer>

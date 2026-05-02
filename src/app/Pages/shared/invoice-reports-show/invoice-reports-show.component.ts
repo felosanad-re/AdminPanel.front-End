@@ -4,6 +4,7 @@ import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-invoice-reports-show',
@@ -14,6 +15,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     CommonModule,
     ConfirmDialogModule,
     FileUploadModule,
+    TranslateModule,
   ],
   templateUrl: './invoice-reports-show.component.html',
   styleUrl: './invoice-reports-show.component.scss',

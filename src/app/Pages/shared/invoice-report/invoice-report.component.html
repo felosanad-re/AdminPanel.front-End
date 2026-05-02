@@ -1,25 +1,71 @@
-<div class="my-3">
-  <h1>Create New {{ pageName }} Report</h1>
-  <div class="mb-4">
-    <label for="reportName" class="block text-2xl font-semibold mb-2">
-      Report Name
-    </label>
-
-    <input
-      id="reportName"
-      type="text"
-      pInputText
-      [ngModel]="reportName"
-      (ngModelChange)="reportNameChange.emit($event)"
-      placeholder="Enter report name..."
-      class="w-4"
-      style="font-size: 1.1rem; padding: 12px 14px"
-    />
+<div class="invoice-report-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="pi pi-file-edit header-icon"></i>
+        <div>
+          <h2>
+            {{
+              "INVOICE_REPORT.CREATE_NEW_REPORT"
+                | translate: { pageName: pageName }
+            }}
+          </h2>
+          <p class="header-subtitle">
+            {{
+              "INVOICE_REPORT.SELECT_PRODUCTS"
+                | translate: { pageName: pageName }
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="grid">
-    <!-- Show Items -->
-    <div class="col-12 md:col-6">
-      <div class="card">
+
+  <!-- Report Name Input -->
+  <div class="report-name-card">
+    <div class="report-name-field">
+      <label for="reportName" class="field-label">
+        <i class="pi pi-tag"></i>
+        {{ "INVOICE_REPORT.REPORT_NAME" | translate }}
+      </label>
+      <input
+        id="reportName"
+        type="text"
+        pInputText
+        [ngModel]="reportName"
+        (ngModelChange)="reportNameChange.emit($event)"
+        [placeholder]="'INVOICE_REPORT.REPORT_NAME_PLACEHOLDER' | translate"
+        class="report-name-input"
+      />
+    </div>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div class="tables-grid">
+    <!-- Available Products -->
+    <div class="table-section available-section">
+      <div class="section-header">
+        <div class="section-title">
+          <i class="pi pi-shopping-bag"></i>
+          <h3>{{ "INVOICE_REPORT.SELECT_PRODUCTS_TO_ADD" | translate }}</h3>
+        </div>
+        <p-iconField>
+          <p-inputIcon>
+            <i class="pi pi-search"></i>
+          </p-inputIcon>
+          <input
+            #search
+            pInputText
+            type="text"
+            class="search-input"
+            [placeholder]="'INVOICE_REPORT.SEARCH_PRODUCTS' | translate"
+            (input)="onSearch.emit(search.value)"
+          />
+        </p-iconField>
+      </div>
+
+      <div class="table-wrapper">
         <p-table
           [value]="products"
           [tableStyle]="{ 'min-width': '40rem' }"
@@ -30,49 +76,36 @@
           [lazy]="true"
           (onLazyLoad)="onPageChangeHelper.emit($event)"
           [first]="onFirst"
+          styleClass="modern-table"
         >
-          <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between">
-              <h5 class="m-0">Select Products To Add To Report items</h5>
-              <!-- Search -->
-              <p-iconField>
-                <p-inputIcon>
-                  <i class="pi pi-search"></i>
-                </p-inputIcon>
-
-                <input
-                  #search
-                  pInputText
-                  type="text"
-                  placeholder="Search..."
-                  (input)="onSearch.emit(search.value)"
-                />
-              </p-iconField>
-            </div>
-          </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Count</th>
-              <th>Add</th>
+              <th>{{ "INVOICE_REPORT.NAME" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.IMAGE" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.PRICE" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.COUNT" | translate }}</th>
+              <th style="width: 5rem">
+                {{ "INVOICE_REPORT.ADD" | translate }}
+              </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-product>
             <tr>
-              <td>{{ product.productName }}</td>
+              <td>
+                <span class="product-name">{{ product.productName }}</span>
+              </td>
               <td>
                 <img
                   [src]="product.mainImage"
                   [alt]="product.productName"
-                  width="80"
-                  class="shadow-4"
+                  class="product-image"
                 />
               </td>
               <td>
-                <div class="flex-auto">
-                  <label for="priceLapel">Price</label>
+                <div class="price-field">
+                  <label for="priceLapel" class="sr-only">{{
+                    "INVOICE_REPORT.PRICE" | translate
+                  }}</label>
                   <p-inputNumber
                     [(ngModel)]="product.price"
                     mode="decimal"
@@ -82,7 +115,7 @@
                 </div>
               </td>
               <td>
-                <div class="card flex justify-content-center">
+                <div class="qty-field">
                   <p-inputNumber
                     [(ngModel)]="product.quantity"
                     [min]="1"
@@ -101,10 +134,10 @@
               <td>
                 <p-button
                   icon="pi pi-plus"
-                  class="mr-2"
                   [rounded]="true"
                   [outlined]="true"
                   severity="success"
+                  size="small"
                   (onClick)="
                     addToItems.emit({
                       product: product,
@@ -119,73 +152,102 @@
         </p-table>
       </div>
     </div>
-    <!-- Selected items -->
-    <div class="col-12 md:col-6">
-      <p-table
-        [value]="productInItems"
-        [tableStyle]="{ 'min-width': '40rem' }"
-        [paginator]="true"
-        [rows]="5"
-        [showCurrentPageReport]="true"
-        [rowTrackBy]="trackByProductId"
-      >
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            Selected Products
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>unit of Price</th>
-            <th>Count</th>
-            <th>Total Price</th>
-            <th>Remove</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-          <tr>
-            <td>{{ product.productName }}</td>
-            <td>
-              <img
-                [src]="product.mainImage"
-                [alt]="product.productName"
-                width="80"
-                class="shadow-4"
-              />
-            </td>
-            <td>{{ product.price | currency: "USD" }}</td>
-            <td>{{ product.quantity }}</td>
-            <td>{{ product.price * product.quantity | currency: "USD" }}</td>
-            <td>
-              <p-button
-                icon="pi pi-minus"
-                class="mr-2"
-                [rounded]="true"
-                [outlined]="true"
-                severity="danger"
-                (onClick)="removeItem(product)"
-              />
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-          <div class="flex align-items-center justify-content-between">
-            In total report transaction price is
-            {{ totalReportTransactionPrice | currency: "USD" }}
-          </div>
-          <div class="card flex justify-content-center my-3">
-            <p-button label="Save" (onClick)="createReport.emit()" />
-            <p-button
-              label="See All Reports"
-              [routerLink]="routes"
-              [severity]="'success'"
-              class="mx-3"
-            />
-          </div>
-        </ng-template>
-      </p-table>
+
+    <!-- Selected Items -->
+    <div class="table-section selected-section">
+      <div class="section-header">
+        <div class="section-title">
+          <i class="pi pi-check-square"></i>
+          <h3>{{ "INVOICE_REPORT.SELECTED_ITEMS" | translate }}</h3>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <p-table
+          [value]="productInItems"
+          [tableStyle]="{ 'min-width': '40rem' }"
+          [paginator]="true"
+          [rows]="5"
+          [showCurrentPageReport]="true"
+          [rowTrackBy]="trackByProductId"
+          styleClass="modern-table"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ "INVOICE_REPORT.NAME" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.IMAGE" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.UNIT_PRICE" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.COUNT" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.TOTAL_PRICE" | translate }}</th>
+              <th style="width: 5rem">
+                {{ "INVOICE_REPORT.REMOVE" | translate }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr>
+              <td>
+                <span class="product-name">{{ product.productName }}</span>
+              </td>
+              <td>
+                <img
+                  [src]="product.mainImage"
+                  [alt]="product.productName"
+                  class="product-image"
+                />
+              </td>
+              <td>
+                <span class="price-value">{{
+                  product.price | currency: "USD"
+                }}</span>
+              </td>
+              <td>
+                <span class="qty-value">{{ product.quantity }}</span>
+              </td>
+              <td>
+                <span class="total-value">{{
+                  product.price * product.quantity | currency: "USD"
+                }}</span>
+              </td>
+              <td>
+                <p-button
+                  icon="pi pi-minus"
+                  [rounded]="true"
+                  [outlined]="true"
+                  severity="danger"
+                  size="small"
+                  (onClick)="removeItem(product)"
+                />
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="summary-section">
+              <div class="grand-total-row">
+                <span class="grand-total-label">{{
+                  "INVOICE_REPORT.TOTAL_REPORT_PRICE_SUMMARY" | translate
+                }}</span>
+                <span class="grand-total-value">{{
+                  totalReportTransactionPrice | currency: "USD"
+                }}</span>
+              </div>
+              <div class="summary-actions">
+                <p-button
+                  [label]="'INVOICE_REPORT.SAVE_REPORT' | translate"
+                  icon="pi pi-save"
+                  (onClick)="createReport.emit()"
+                />
+                <p-button
+                  [label]="'INVOICE_REPORT.VIEW_ALL_REPORTS' | translate"
+                  icon="pi pi-list"
+                  [routerLink]="routes"
+                  [severity]="'success'"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
   </div>
 </div>

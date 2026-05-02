@@ -1,0 +1,35 @@
+.lang-toggle-btn {
+  ::ng-deep {
+    .p-button-label {
+      font-weight: 600;
+    }
+  }
+}
+
+:host {
+  ::ng-deep {
+    .p-menubar {
+      padding: 0.5rem 1rem;
+
+      .p-menubar-start {
+        flex: 1;
+      }
+
+      .p-menubar-end {
+        .flex {
+          gap: 0.5rem !important;
+        }
+
+        p-button {
+          display: inline-flex !important;
+        }
+      }
+    }
+
+    .rtl & {
+      .p-menubar {
+        direction: rtl;
+      }
+    }
+  }
+}

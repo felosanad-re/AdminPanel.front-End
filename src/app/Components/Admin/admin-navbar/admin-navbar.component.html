@@ -35,7 +35,7 @@
         <h3 class="font-semibold">
           Welcome back
           <span class="name">{{
-            (currentUser$ | async)?.userName || "Guest"
+            (currentUser$ | async)?.userName || ("NAVBAR.GUEST" | translate)
           }}</span>
         </h3>
         <p-button (onClick)="onToggle()" icon="pi pi-bars" />
@@ -44,14 +44,21 @@
     <ng-template pTemplate="end">
       <div class="flex align-items-center gap-2">
         <p-button
-          label="Create Buyer Report"
+          [label]="'NAVBAR.CREATE_BUYER_REPORT' | translate"
           severity="secondary"
           [routerLink]="['createBuyerReport']"
         />
         <p-button
-          label="Create Sales Report"
+          [label]="'NAVBAR.CREATE_SALES_REPORT' | translate"
           severity="help"
           [routerLink]="['createReport']"
+        />
+        <p-button
+          [label]="langLabel"
+          icon="pi pi-globe"
+          severity="info"
+          (onClick)="toggleLanguage()"
+          class="lang-toggle-btn"
         />
       </div>
     </ng-template>

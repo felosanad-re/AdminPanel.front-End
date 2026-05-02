@@ -13,6 +13,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { AuthService } from '../../../Core/Services/Auth-Services/auth.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../Core/Services/Toast.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -23,47 +25,67 @@ import { ToastService } from '../../../Core/Services/Toast.service';
 })
 export class AdminSidebarComponent {
   items: MenuItem[] | undefined;
+  langChangeSub!: Subscription;
   constructor(
     private readonly _authService: AuthService,
     private readonly _router: Router,
     private readonly _toastService: ToastService,
+    private readonly _translate: TranslateService,
   ) {}
   ngOnInit() {
+    this._translate.get('SIDEBAR').subscribe(() => {
+      this.buildMenu();
+    });
+    this.langChangeSub = this._translate.onLangChange.subscribe(() =>
+      this.buildMenu(),
+    );
+  }
+  ngOnDestroy(): void {
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
+  }
+
+  @Input() sidebarOpen: boolean = false;
+  @Output() sidebarOpenChange = new EventEmitter<boolean>();
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+
+  buildMenu() {
     this.items = [
       {
-        label: 'Dashboard',
+        label: this._translate.instant('SIDEBAR.HOME'),
         icon: 'pi pi-home',
         routerLink: '/dashboard',
       },
       {
-        label: 'Features',
+        label: this._translate.instant('SIDEBAR.FEATURES'),
         icon: 'pi pi-star',
         items: [
           {
-            label: 'Products',
+            label: this._translate.instant('SIDEBAR.PRODUCTS'),
             icon: 'pi pi-align-justify',
             routerLink: 'products',
           },
           {
-            label: 'Category',
+            label: this._translate.instant('SIDEBAR.CATEGORIES'),
             icon: 'pi pi-th-large',
             routerLink: 'categories',
           },
           {
-            label: 'Brands',
+            label: this._translate.instant('SIDEBAR.BRANDS'),
             icon: 'pi pi-sparkles',
             routerLink: 'brands',
           },
           {
-            label: 'Reports',
+            label: this._translate.instant('SIDEBAR.REPORTS'),
             items: [
               {
-                label: 'Buyer Reports',
+                label: this._translate.instant('SIDEBAR.BUYER_REPORTS'),
                 icon: 'pi pi-star',
                 routerLink: 'buyerReports',
               },
               {
-                label: 'Sales Reports',
+                label: this._translate.instant('SIDEBAR.SALES_REPORTS'),
                 icon: 'pi pi-dollar',
                 routerLink: 'reports',
               },
@@ -72,24 +94,21 @@ export class AdminSidebarComponent {
         ],
       },
       {
-        label: 'Contact',
+        label: this._translate.instant('SIDEBAR.CONTACT'),
         icon: 'pi pi-envelope',
       },
       {
-        label: 'Create New Admin',
+        label: this._translate.instant('SIDEBAR.ADMIN'),
         icon: 'pi pi-user-plus',
         routerLink: 'createAccount',
       },
       {
-        label: 'Logout',
+        label: this._translate.instant('SIDEBAR.LOGOUT'),
         icon: 'pi pi-sign-out',
         command: () => this.logOut(),
       },
     ];
   }
-  @Input() sidebarOpen: boolean = false;
-  @Output() sidebarOpenChange = new EventEmitter<boolean>();
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
   onHide() {
     this.sidebarOpen = false;
     this.sidebarOpenChange.emit(false);

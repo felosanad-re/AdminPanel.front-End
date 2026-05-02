@@ -10,6 +10,7 @@ import { ReportItems } from '../../../Core/Interfaces/Reports/report-items';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-invoice-report',
   standalone: true,
@@ -23,6 +24,7 @@ import { InputTextModule } from 'primeng/inputtext';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    TranslateModule,
   ],
   templateUrl: './invoice-report.component.html',
   styleUrl: './invoice-report.component.scss',

@@ -31,6 +31,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProductImageResponse } from '../../../Core/Interfaces/Products/product-image-response';
 import { Observable } from 'rxjs';
 import { ImportResult } from '../../../Core/Interfaces/import-result';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products',
@@ -54,6 +55,7 @@ import { ImportResult } from '../../../Core/Interfaces/import-result';
     InputNumberModule,
     ReactiveFormsModule,
     DropdownModule,
+    TranslateModule,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
@@ -98,6 +100,7 @@ export class ProductsComponent {
     private readonly confirmationService: ConfirmationService,
     private readonly _brandService: BrandService,
     private readonly _categoryService: CategoryService,
+    private readonly _translate: TranslateService,
   ) {}
   ngOnInit() {
     this.getAllProduct();
@@ -229,11 +232,10 @@ export class ProductsComponent {
   deleteProduct(product: ProductResponse) {
     this.product = { ...product };
     this.confirmationService.confirm({
-      message:
-        'Are you sure you want to delete' +
-        this.product.productName +
-        'this product?',
-      header: 'Confirm',
+      message: this._translate.instant('PRODUCTS.CONFIRM_DELETE_PRODUCT', {
+        name: this.product.productName,
+      }),
+      header: this._translate.instant('PRODUCTS.CONFIRM'),
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this._productService.deleteProduct(product.id).subscribe({
@@ -253,11 +255,10 @@ export class ProductsComponent {
     if (!this.selectedProducts || this.selectedProducts.length === 0) return;
     const ids = this.selectedProducts.map((product) => product.id);
     this.confirmationService.confirm({
-      message:
-        'Are you sure you want to delete ' +
-        this.selectedProducts.length +
-        ' products?',
-      header: 'Confirm',
+      message: this._translate.instant('PRODUCTS.CONFIRM_DELETE_PRODUCTS', {
+        count: this.selectedProducts.length,
+      }),
+      header: this._translate.instant('PRODUCTS.CONFIRM'),
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this._productService.deleteBulk(ids).subscribe({
@@ -296,7 +297,10 @@ export class ProductsComponent {
       const reader = new FileReader(); // To Preview Image
       reader.onload = () => {
         this.imagePreview = reader.result as string; // Preview
-        this._toastService.showSuccess('Image Added succeeded', 'Success');
+        this._toastService.showSuccess(
+          this._translate.instant('PRODUCTS.IMAGE_ADDED_SUCCESS'),
+          'Success',
+        );
       };
       reader.readAsDataURL(file);
     }
@@ -314,7 +318,7 @@ export class ProductsComponent {
         this.subImagesPreview.push(e.target.result); // To Preview
         this.subImagesUploads.push(file); // To API
         this._toastService.showSuccess(
-          'Image Added you can add 3 images only',
+          this._translate.instant('PRODUCTS.IMAGE_ADDED_LIMIT'),
           'Success',
         );
       };
@@ -362,10 +366,14 @@ export class ProductsComponent {
   }
 
   onImportProducts(event: any) {
-    const file: File | undefined = event?.files?.[0] ?? event?.currentFiles?.[0];
+    const file: File | undefined =
+      event?.files?.[0] ?? event?.currentFiles?.[0];
 
     if (!file) {
-      this._toastService.showError('Please select a valid Excel file.', 'Error');
+      this._toastService.showError(
+        this._translate.instant('PRODUCTS.SELECT_VALID_EXCEL'),
+        'Error',
+      );
       return;
     }
 
@@ -398,13 +406,17 @@ export class ProductsComponent {
         const blob = response.body;
 
         if (!blob) {
-          this._toastService.showError('Export failed', 'Error');
+          this._toastService.showError(
+            this._translate.instant('PRODUCTS.EXPORT_FAILED'),
+            'Error',
+          );
           return;
         }
 
         const fileName =
-          this.getFileNameFromHeaders(response.headers.get('content-disposition')) ||
-          `Products-${new Date().toISOString().slice(0, 10)}.xlsx`;
+          this.getFileNameFromHeaders(
+            response.headers.get('content-disposition'),
+          ) || `Products-${new Date().toISOString().slice(0, 10)}.xlsx`;
 
         const downloadUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -413,7 +425,10 @@ export class ProductsComponent {
         link.click();
         URL.revokeObjectURL(downloadUrl);
 
-        this._toastService.showSuccess('Products exported successfully', 'Success');
+        this._toastService.showSuccess(
+          this._translate.instant('PRODUCTS.EXPORT_SUCCESS'),
+          'Success',
+        );
       },
       error: (err) => {
         this._toastService.showError(
@@ -424,10 +439,16 @@ export class ProductsComponent {
     });
   }
 
-  private getFileNameFromHeaders(contentDisposition: string | null): string | null {
+  private getFileNameFromHeaders(
+    contentDisposition: string | null,
+  ): string | null {
     if (!contentDisposition) return null;
 
-    const match = contentDisposition.match(/filename\*?=(?:UTF-8''|\"?)([^\";]+)/i);
-    return match?.[1] ? decodeURIComponent(match[1].replace(/\"/g, '').trim()) : null;
+    const match = contentDisposition.match(
+      /filename\*?=(?:UTF-8''|\"?)([^\";]+)/i,
+    );
+    return match?.[1]
+      ? decodeURIComponent(match[1].replace(/\"/g, '').trim())
+      : null;
   }
 }

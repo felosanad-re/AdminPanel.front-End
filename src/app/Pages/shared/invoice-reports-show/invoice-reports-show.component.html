@@ -11,13 +11,13 @@
     <ng-template pTemplate="caption">
       <div class="flex flex-wrap justify-content-end gap-2">
         <p-button
-          label="Expand All"
+          [label]="'INVOICE_REPORTS_SHOW.EXPAND_ALL' | translate"
           icon="pi pi-plus"
           text
           (onClick)="onExpandAll.emit()"
         />
         <p-button
-          label="Collapse All"
+          [label]="'INVOICE_REPORTS_SHOW.COLLAPSE_ALL' | translate"
           icon="pi pi-minus"
           text
           (onClick)="onCollapseAll.emit()"
@@ -26,8 +26,7 @@
           mode="basic"
           accept=".xlsx,.xls"
           [maxFileSize]="10000000"
-          label="Import"
-          chooseLabel="Import"
+          [chooseLabel]="'INVOICE_REPORTS_SHOW.IMPORT' | translate"
           class="mr-2 inline-block"
           [auto]="true"
           [customUpload]="true"
@@ -35,7 +34,7 @@
         />
         <p-button
           severity="help"
-          label="Export"
+          [label]="'INVOICE_REPORTS_SHOW.EXPORT' | translate"
           icon="pi pi-upload"
           (onClick)="onExportHandler.emit()"
         />
@@ -45,21 +44,28 @@
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 5rem"></th>
-        <th pSortableColumn="id">Report Number <p-sortIcon field="id" /></th>
+        <th pSortableColumn="id">
+          {{ "INVOICE_REPORTS_SHOW.REPORT_NUMBER" | translate }}
+          <p-sortIcon field="id" />
+        </th>
         <th pSortableColumn="companyName">
-          Report Name <p-sortIcon field="companyName" />
+          {{ "INVOICE_REPORTS_SHOW.REPORT_NAME" | translate }}
+          <p-sortIcon field="companyName" />
         </th>
         <th pSortableColumn="userName">
-          Admin Name <p-sortIcon field="userName" />
+          {{ "INVOICE_REPORTS_SHOW.ADMIN_NAME" | translate }}
+          <p-sortIcon field="userName" />
         </th>
         <th pSortableColumn="totalReportTransactionPrice">
-          total Report Price <p-sortIcon field="totalReportTransactionPrice" />
+          {{ "INVOICE_REPORTS_SHOW.TOTAL_REPORT_PRICE" | translate }}
+          <p-sortIcon field="totalReportTransactionPrice" />
         </th>
         <th pSortableColumn="createdAt">
-          created At <p-sortIcon field="createdAt" />
+          {{ "INVOICE_REPORTS_SHOW.CREATED_AT" | translate }}
+          <p-sortIcon field="createdAt" />
         </th>
-        <th>Print</th>
-        <th>Delete</th>
+        <th>{{ "INVOICE_REPORTS_SHOW.PRINT" | translate }}</th>
+        <th>{{ "INVOICE_REPORTS_SHOW.DELETE" | translate }}</th>
       </tr>
     </ng-template>
     <!-- Report Body -->
@@ -119,19 +125,24 @@
               <ng-template pTemplate="header">
                 <tr>
                   <th pSortableColumn="id">
-                    Product Id <p-sortIcon field="price" />
+                    {{ "INVOICE_REPORTS_SHOW.PRODUCT_ID" | translate }}
+                    <p-sortIcon field="price" />
                   </th>
                   <th pSortableColumn="productName">
-                    Product Name <p-sortIcon field="productName" />
+                    {{ "INVOICE_REPORTS_SHOW.PRODUCT_NAME" | translate }}
+                    <p-sortIcon field="productName" />
                   </th>
                   <th pSortableColumn="quantity">
-                    quantity <p-sortIcon field="quantity" />
+                    {{ "INVOICE_REPORTS_SHOW.QUANTITY" | translate }}
+                    <p-sortIcon field="quantity" />
                   </th>
                   <th pSortableColumn="price">
-                    Price<p-sortIcon field="price" />
+                    {{ "INVOICE_REPORTS_SHOW.PRICE" | translate
+                    }}<p-sortIcon field="price" />
                   </th>
                   <th pSortableColumn="totalPrice">
-                    total Price <p-sortIcon field="totalPrice" />
+                    {{ "INVOICE_REPORTS_SHOW.TOTAL_PRICE" | translate }}
+                    <p-sortIcon field="totalPrice" />
                   </th>
                   <th style="width: 4rem"></th>
                 </tr>
@@ -150,7 +161,9 @@
               <ng-template pTemplate="emptymessage">
                 <tr>
                   <td colspan="6">
-                    There are no Products for this Report yet.
+                    {{
+                      "INVOICE_REPORTS_SHOW.NO_PRODUCTS_FOR_REPORT" | translate
+                    }}
                   </td>
                 </tr>
               </ng-template>

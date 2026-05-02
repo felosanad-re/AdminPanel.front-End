@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { ChartsService } from '../../../Core/Services/AdminServices/charts.service';
@@ -10,13 +10,22 @@ import { ApplicationResultService } from '../../../Core/Interfaces/application-r
 import { Pagination } from '../../../Core/Interfaces/pagination';
 import { ProductResponse } from '../../../Core/Interfaces/Products/product-response';
 import { CalendarModule } from 'primeng/calendar';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CardModule, ChartModule, CalendarModule, CommonModule, FormsModule],
+  imports: [
+    CardModule,
+    ChartModule,
+    CalendarModule,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -33,12 +42,33 @@ export class HomeComponent {
   productsCount!: number;
   rangeDates: Date[] = [];
   params: Chart = new Chart();
+  private langChangeSub!: Subscription;
+  private readonly isBrowser: boolean;
   constructor(
     private readonly _chartService: ChartsService,
     private readonly _productService: ProductService,
-  ) {}
+    private readonly _translate: TranslateService,
+    @Inject(PLATFORM_ID) platformId: object,
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
+
   ngOnInit(): void {
     this.getChartsValues();
+    this.langChangeSub = this._translate.onLangChange.subscribe(() => {
+      if (this.charts) {
+        this.initializeChart();
+      }
+      if (this.items) {
+        this.initializeItems();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
   }
 
   getChartsValues() {

@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [],
@@ -39,6 +40,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     FormsModule,
     InputNumberModule,
+    TranslateModule,
   ],
   exports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     FormsModule,
     InputNumberModule,
+    TranslateModule,
   ],
 })
 export class ShowDataModule {}
