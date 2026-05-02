@@ -78,14 +78,10 @@ export class CreateReportComponent {
     this.productInItems = [...this.productInItems];
   }
 
-  removeFromItems(product: ProductResponse) {
-    console.log('Removing product:', product);
+  removeFromItems(item: ReportItems) {
     this.productInItems = this.productInItems.filter(
-      (item) => item.productId !== product.id,
+      (i) => i.productId !== item.productId,
     );
-    this.productInItems = [...this.productInItems];
-    this.cdr.detectChanges();
-    setTimeout(() => this.cdr.detectChanges(), 10);
   }
 
   // Create report

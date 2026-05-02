@@ -1,34 +1,43 @@
-<div class="invoice-report-page">
+<!-- Modern Invoice Report Page -->
+<div class="invoice-report-wrapper">
   <!-- Page Header -->
-  <div class="page-header">
+  <header class="report-header">
     <div class="header-content">
-      <div class="header-title">
-        <i class="pi pi-file-edit header-icon"></i>
-        <div>
-          <h2>
-            {{
-              "INVOICE_REPORT.CREATE_NEW_REPORT"
-                | translate: { pageName: pageName }
-            }}
-          </h2>
-          <p class="header-subtitle">
-            {{
-              "INVOICE_REPORT.SELECT_PRODUCTS"
-                | translate: { pageName: pageName }
-            }}
-          </p>
-        </div>
+      <div class="header-icon">
+        <i class="pi pi-file-plus"></i>
+      </div>
+      <div class="header-text">
+        <h1>
+          {{
+            "INVOICE_REPORT.CREATE_NEW_REPORT"
+              | translate: { pageName: pageName }
+          }}
+        </h1>
+        <p>
+          {{
+            "INVOICE_REPORT.SELECT_PRODUCTS"
+              | translate: { pageName: (pageName | lowercase) }
+          }}
+        </p>
       </div>
     </div>
-  </div>
+    <div class="header-badge">
+      <span class="badge-label">{{
+        "INVOICE_REPORT.REPORT_TYPE" | translate
+      }}</span>
+      <span class="badge-value">{{ pageName }}</span>
+    </div>
+  </header>
 
-  <!-- Report Name Input -->
-  <div class="report-name-card">
-    <div class="report-name-field">
-      <label for="reportName" class="field-label">
-        <i class="pi pi-tag"></i>
-        {{ "INVOICE_REPORT.REPORT_NAME" | translate }}
-      </label>
+  <!-- Report Name Section -->
+  <section class="report-name-section">
+    <div class="section-icon">
+      <i class="pi pi-pencil"></i>
+    </div>
+    <div class="name-input-wrapper">
+      <label for="reportName" class="input-label">{{
+        "INVOICE_REPORT.REPORT_NAME" | translate
+      }}</label>
       <input
         id="reportName"
         type="text"
@@ -39,36 +48,75 @@
         class="report-name-input"
       />
     </div>
-  </div>
+  </section>
 
-  <!-- Two Column Layout -->
-  <div class="tables-grid">
-    <!-- Available Products -->
-    <div class="table-section available-section">
-      <div class="section-header">
-        <div class="section-title">
-          <i class="pi pi-shopping-bag"></i>
-          <h3>{{ "INVOICE_REPORT.SELECT_PRODUCTS_TO_ADD" | translate }}</h3>
+  <!-- Stats Summary Bar -->
+  <section class="stats-bar">
+    <div class="stat-card stat-products">
+      <div class="stat-icon">
+        <i class="pi pi-box"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ itemCount }}</span>
+        <span class="stat-label">{{
+          "INVOICE_REPORT.AVAILABLE_PRODUCTS" | translate
+        }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-selected">
+      <div class="stat-icon">
+        <i class="pi pi-shopping-cart"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ productInItems.length }}</span>
+        <span class="stat-label">{{
+          "INVOICE_REPORT.SELECTED_ITEMS" | translate
+        }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-total">
+      <div class="stat-icon">
+        <i class="pi pi-dollar"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{
+          totalReportTransactionPrice | currency: "USD"
+        }}</span>
+        <span class="stat-label">{{
+          "INVOICE_REPORT.TOTAL_AMOUNT" | translate
+        }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Left: Product Catalog -->
+    <div class="catalog-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="pi pi-th-large"></i>
+          <h2>{{ "INVOICE_REPORT.PRODUCT_CATALOG" | translate }}</h2>
         </div>
-        <p-iconField>
-          <p-inputIcon>
+        <div class="search-wrapper">
+          <span class="p-input-icon-left search-input-container">
             <i class="pi pi-search"></i>
-          </p-inputIcon>
-          <input
-            #search
-            pInputText
-            type="text"
-            class="search-input"
-            [placeholder]="'INVOICE_REPORT.SEARCH_PRODUCTS' | translate"
-            (input)="onSearch.emit(search.value)"
-          />
-        </p-iconField>
+            <input
+              #search
+              pInputText
+              type="text"
+              [placeholder]="'INVOICE_REPORT.SEARCH_PRODUCTS' | translate"
+              (input)="onSearch.emit(search.value)"
+              class="search-input"
+            />
+          </span>
+        </div>
       </div>
 
-      <div class="table-wrapper">
+      <div class="panel-body">
         <p-table
           [value]="products"
-          [tableStyle]="{ 'min-width': '40rem' }"
+          [tableStyle]="{ 'min-width': '100%' }"
           [paginator]="true"
           [rows]="5"
           [showCurrentPageReport]="true"
@@ -76,76 +124,84 @@
           [lazy]="true"
           (onLazyLoad)="onPageChangeHelper.emit($event)"
           [first]="onFirst"
-          styleClass="modern-table"
+          styleClass="modern-table catalog-table"
+          [rowsPerPageOptions]="[5, 10, 25]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
         >
           <ng-template pTemplate="header">
             <tr>
-              <th>{{ "INVOICE_REPORT.NAME" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.IMAGE" | translate }}</th>
+              <th>{{ "INVOICE_REPORT.PRODUCT" | translate }}</th>
               <th>{{ "INVOICE_REPORT.PRICE" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.COUNT" | translate }}</th>
-              <th style="width: 5rem">
-                {{ "INVOICE_REPORT.ADD" | translate }}
+              <th>{{ "INVOICE_REPORT.QTY" | translate }}</th>
+              <th style="width: 6rem">
+                {{ "INVOICE_REPORT.ACTION" | translate }}
               </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-product>
-            <tr>
+            <tr class="product-row">
               <td>
-                <span class="product-name">{{ product.productName }}</span>
+                <div class="product-cell">
+                  <div class="product-image-wrapper">
+                    <img
+                      [src]="product.mainImage"
+                      [alt]="product.productName"
+                      class="product-img"
+                    />
+                  </div>
+                  <span class="product-name">{{ product.productName }}</span>
+                </div>
               </td>
               <td>
-                <img
-                  [src]="product.mainImage"
-                  [alt]="product.productName"
-                  class="product-image"
-                />
-              </td>
-              <td>
-                <div class="price-field">
-                  <label for="priceLapel" class="sr-only">{{
-                    "INVOICE_REPORT.PRICE" | translate
-                  }}</label>
+                <div class="price-cell">
                   <p-inputNumber
                     [(ngModel)]="product.price"
                     mode="decimal"
-                    inputId="priceLapel"
                     [useGrouping]="false"
+                    class="price"
+                    [min]="0"
                   />
                 </div>
               </td>
               <td>
-                <div class="qty-field">
-                  <p-inputNumber
-                    [(ngModel)]="product.quantity"
-                    [min]="1"
-                    [style]="{ width: '3rem' }"
-                    [showButtons]="true"
-                    buttonLayout="vertical"
-                    spinnerMode="vertical"
-                    inputId="vertical"
-                    decrementButtonClass="p-button-danger"
-                    incrementButtonClass="p-button-success"
-                    incrementButtonIcon="pi pi-plus"
-                    decrementButtonIcon="pi pi-minus"
-                  />
-                </div>
+                <p-inputNumber
+                  [(ngModel)]="product.quantity"
+                  [min]="1"
+                  [style]="{ width: '5rem' }"
+                  [showButtons]="true"
+                  buttonLayout="vertical"
+                  spinnerMode="vertical"
+                  inputId="vertical"
+                  decrementButtonClass="p-button-danger"
+                  incrementButtonClass="p-button-success"
+                  incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus"
+                />
               </td>
               <td>
-                <p-button
-                  icon="pi pi-plus"
-                  [rounded]="true"
-                  [outlined]="true"
-                  severity="success"
-                  size="small"
-                  (onClick)="
+                <button
+                  class="add-btn"
+                  (click)="
                     addToItems.emit({
                       product: product,
                       quantity: product.quantity,
                       price: product.price,
                     })
                   "
-                />
+                >
+                  <i class="pi pi-plus"></i>
+                  {{ "INVOICE_REPORT.ADD" | translate }}
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="empty-state">
+                <div class="empty-content">
+                  <i class="pi pi-inbox"></i>
+                  <p>{{ "INVOICE_REPORT.NO_PRODUCTS_FOUND" | translate }}</p>
+                </div>
               </td>
             </tr>
           </ng-template>
@@ -153,100 +209,83 @@
       </div>
     </div>
 
-    <!-- Selected Items -->
-    <div class="table-section selected-section">
-      <div class="section-header">
-        <div class="section-title">
+    <!-- Right: Selected Items -->
+    <div class="selected-panel">
+      <div class="panel-header selected-header">
+        <div class="panel-title">
           <i class="pi pi-check-square"></i>
-          <h3>{{ "INVOICE_REPORT.SELECTED_ITEMS" | translate }}</h3>
+          <h2>{{ "INVOICE_REPORT.SELECTED_ITEMS" | translate }}</h2>
+          <span class="items-count">{{ productInItems.length }}</span>
         </div>
       </div>
 
-      <div class="table-wrapper">
-        <p-table
-          [value]="productInItems"
-          [tableStyle]="{ 'min-width': '40rem' }"
-          [paginator]="true"
-          [rows]="5"
-          [showCurrentPageReport]="true"
-          [rowTrackBy]="trackByProductId"
-          styleClass="modern-table"
-        >
-          <ng-template pTemplate="header">
-            <tr>
-              <th>{{ "INVOICE_REPORT.NAME" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.IMAGE" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.UNIT_PRICE" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.COUNT" | translate }}</th>
-              <th>{{ "INVOICE_REPORT.TOTAL_PRICE" | translate }}</th>
-              <th style="width: 5rem">
-                {{ "INVOICE_REPORT.REMOVE" | translate }}
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-product>
-            <tr>
-              <td>
-                <span class="product-name">{{ product.productName }}</span>
-              </td>
-              <td>
-                <img
-                  [src]="product.mainImage"
-                  [alt]="product.productName"
-                  class="product-image"
-                />
-              </td>
-              <td>
-                <span class="price-value">{{
-                  product.price | currency: "USD"
-                }}</span>
-              </td>
-              <td>
-                <span class="qty-value">{{ product.quantity }}</span>
-              </td>
-              <td>
-                <span class="total-value">{{
-                  product.price * product.quantity | currency: "USD"
-                }}</span>
-              </td>
-              <td>
-                <p-button
-                  icon="pi pi-minus"
-                  [rounded]="true"
-                  [outlined]="true"
-                  severity="danger"
-                  size="small"
-                  (onClick)="removeItem(product)"
-                />
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="summary">
-            <div class="summary-section">
-              <div class="grand-total-row">
-                <span class="grand-total-label">{{
-                  "INVOICE_REPORT.TOTAL_REPORT_PRICE_SUMMARY" | translate
-                }}</span>
-                <span class="grand-total-value">{{
-                  totalReportTransactionPrice | currency: "USD"
-                }}</span>
-              </div>
-              <div class="summary-actions">
-                <p-button
-                  [label]="'INVOICE_REPORT.SAVE_REPORT' | translate"
-                  icon="pi pi-save"
-                  (onClick)="createReport.emit()"
-                />
-                <p-button
-                  [label]="'INVOICE_REPORT.VIEW_ALL_REPORTS' | translate"
-                  icon="pi pi-list"
-                  [routerLink]="routes"
-                  [severity]="'success'"
-                />
-              </div>
+      <div class="panel-body selected-body">
+        @if (productInItems.length === 0) {
+          <div class="empty-selected">
+            <div class="empty-icon-wrapper">
+              <i class="pi pi-shopping-cart"></i>
             </div>
-          </ng-template>
-        </p-table>
+            <h3>{{ "INVOICE_REPORT.NO_ITEMS_SELECTED" | translate }}</h3>
+            <p>{{ "INVOICE_REPORT.BROWSE_CATALOG" | translate }}</p>
+          </div>
+        } @else {
+          <div class="selected-items-list">
+            @for (item of productInItems; track item.productId) {
+              <div class="selected-item-card">
+                <div class="item-image">
+                  <img [src]="item.mainImage" [alt]="item.productName" />
+                </div>
+                <div class="item-details">
+                  <h4>{{ item.productName }}</h4>
+                  <div class="item-meta">
+                    <span class="meta-price">
+                      <i class="pi pi-dollar"></i>
+                      {{ item.price | currency: "USD" }}
+                    </span>
+                    <span class="meta-qty">
+                      <i class="pi pi-box"></i>
+                      ×{{ item.quantity }}
+                    </span>
+                  </div>
+                </div>
+                <div class="item-total">
+                  {{ item.price * item.quantity | currency: "USD" }}
+                </div>
+                <button class="remove-btn" (click)="removeItem(item)">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            }
+          </div>
+
+          <!-- Summary Footer -->
+          <div class="summary-footer">
+            <div class="summary-row">
+              <span class="summary-label">{{
+                "INVOICE_REPORT.ITEMS_COUNT" | translate
+              }}</span>
+              <span class="summary-value">{{ productInItems.length }}</span>
+            </div>
+            <div class="summary-row grand-total">
+              <span class="summary-label">{{
+                "INVOICE_REPORT.GRAND_TOTAL" | translate
+              }}</span>
+              <span class="summary-value">{{
+                totalReportTransactionPrice | currency: "USD"
+              }}</span>
+            </div>
+            <div class="summary-actions">
+              <button class="save-btn" (click)="createReport.emit()">
+                <i class="pi pi-save"></i>
+                {{ "INVOICE_REPORT.SAVE_REPORT" | translate }}
+              </button>
+              <a [routerLink]="routes" class="view-all-btn">
+                <i class="pi pi-list"></i>
+                {{ "INVOICE_REPORT.VIEW_ALL_REPORTS" | translate }}
+              </a>
+            </div>
+          </div>
+        }
       </div>
     </div>
   </div>

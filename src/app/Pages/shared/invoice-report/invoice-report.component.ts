@@ -45,12 +45,12 @@ export class InvoiceReportComponent {
     quantity: number | null | undefined;
     price: number | null | undefined;
   }>();
-  @Output() removeFromItems = new EventEmitter<ProductResponse>();
+  @Output() removeFromItems = new EventEmitter<ReportItems>();
   @Output() createReport = new EventEmitter<void>();
   @Output() onPageChangeHelper = new EventEmitter<any>();
 
-  removeItem(product: ProductResponse) {
-    this.removeFromItems.emit(product);
+  removeItem(item: ReportItems) {
+    this.removeFromItems.emit(item);
   }
 
   trackByProductId(index: number, product: ProductResponse) {
