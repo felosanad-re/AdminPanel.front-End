@@ -13,6 +13,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { loadingInterceptor } from './Core/Services/Interceptors/loading.interceptor';
 import { handlerTokenInterceptor } from './Core/Services/Interceptors/handler-token.interceptor';
+import { languageInterceptor } from './Core/Services/Interceptors/language.interceptor';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { MergedTranslateLoader } from './Core/Services/merged-translate-loader';
 import { TranslationService } from './Core/Services/translation.service';
@@ -36,6 +37,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     provideHttpClient(
       withInterceptors([
+        languageInterceptor,
         handlerTokenInterceptor,
         apiErrorInterceptor,
         loadingInterceptor,
